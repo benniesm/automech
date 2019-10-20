@@ -50,10 +50,10 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['string', 'nullable', 'email', 'max:255', 'unique:users'],
+            //'name' => ['required', 'string', 'max:255'],
+            //'email' => ['string', 'nullable', 'email', 'max:255', 'unique:users'],
             'mobile_phone' => ['required', 'string', 'max:20', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'integer', 'min:6', 'confirmed'],
         ]);
     }
 
@@ -65,19 +65,30 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $characters = 'abcdefghijklmnopqrstuvwxyz';
+        $random_string = '';
+        for ($i = 0; $i < 12; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $random_string .= $characters[$index];
+        }
+
+        $random_name = $random_string.rand(10, 99);
+
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'name' => $random_string,
+            'email' => $random_name.'@random-email.rand',
             'mobile_phone' => $data['mobile_phone'],
             'password' => Hash::make($data['password']),
         ]);
     }
+
     protected function registered(Request $request, $user)
 		{
 				$user->generateToken();
 
 				return response()->json(['data' => $user->toArray()], 201);
 		}
+
 		public function register(Request $request)
 		{
 				$this->validator($request->all())->validate();

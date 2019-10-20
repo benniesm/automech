@@ -16,10 +16,12 @@ use Illuminate\Http\Request;
 Route::post('register', 'Auth\RegisterController@register');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout');
+Route::get('confirm-code', 'Auth\LoginController@confirm_code');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::group(['middleware' => ['auth:api', 'cors']], function() {
-
+    Route::get('profile/{user}', 'ProfileController@show');
+	  Route::put('profile/{user}', 'ProfileController@update');
 });
