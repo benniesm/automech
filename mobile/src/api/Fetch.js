@@ -80,7 +80,7 @@ const postApi = async(params) => {
   });
   const jsonStatus = await response.status;
   const jsonData = await response.json();
-  if (jsonStatus >= 300){
+  if (jsonStatus >= 300) {
     return {'status': jsonStatus, 'data': jsonData};
   }
   return {'status': jsonStatus, 'data': jsonData};
