@@ -12,6 +12,8 @@ import {
   View,
   Text,
 } from 'react-native';
+import { Provider } from 'react-redux';
+import store from './src/store/Redux/Store';
 import styles from './Styles.js';
 import Header from './src/components/Header';
 import Navigator from './src/Navigator';
@@ -26,10 +28,12 @@ const App: () => React$Node = () => {
     </View>
   )
   :
-  <View style={styles.container}>
-    <Header />
-    <Navigator style={styles.body} />
-  </View>
+  <Provider store={store}>
+    <View style={styles.container}>
+      <Header />
+      <Navigator style={styles.body} />
+    </View>
+  </Provider>
 };
 
 export default App;

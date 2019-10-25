@@ -18,17 +18,15 @@ import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import multiGet from './store/AsyncStorage/GetItems';
+import { connect } from 'react-redux';
+import { loginUser } from './store/Redux/actions/AuthAction';
 import styles from '../Styles.js';
 import fetchApi from './api/Fetch';
 import Login from './auth/Login';
 
-class Index extends Component {
+class Container extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-      auth: null,
-      m: 'null',
-		}
 	}
 
   componentDidMount() {
@@ -51,13 +49,14 @@ class Index extends Component {
       {'url': 'profile', 'fetchId': userId, 'data': ''}
     );
     if (myProfile.data.hasOwnProperty('api_token') && myProfile.data.api_token === token) {
-      this.setState({ auth: true });
+      this.props.authenticateUser(true);
     } else {
       this.props.navigation.navigate('Sign');
     }
     //console.log(myProfile.data);
     //console.log({'profileToken': myProfile.data.api_token});
     //console.log({'token': token});
+    //console.log(this.props.state.auth.authenticated);
   }
 
   render() {
@@ -67,7 +66,7 @@ class Index extends Component {
       ['Tyres', 'Fuel Station', 'Towing Van'],
     ];
 
-    return this.state.auth === true ?
+    return this.props.state.auth.authenticated === true ?
       (
         <View style={Object.assign({}, styles.window, styles.bg2)}>
           <Table style={styles.tableIndex}>
@@ -88,5 +87,19 @@ class Index extends Component {
       )
   }
 }
+
+const mapStateToProps = (state) => {
+  return { state: state }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticateUser: (data) => {
+      dispatch(loginUser(data))
+    }
+  }
+};
+
+const Index = connect(mapStateToProps, mapDispatchToProps)(Container);
 
 export default Index;

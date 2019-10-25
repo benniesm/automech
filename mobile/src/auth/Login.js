@@ -8,11 +8,13 @@ import {
 	View,Image
 } from 'react-native';
 import multiSet from '../store/AsyncStorage/SetItems';
+import { connect } from 'react-redux';
+import { loginUser } from '../store/Redux/actions/AuthAction';
 import fetchApi from '../api/Fetch';
 import styles from '../../Styles.js';
 import Loading from '../components/Loading';
 
-class Login extends Component {
+class LoginContainer extends Component {
 	constructor() {
 		super();
 		this.state = {
@@ -122,7 +124,8 @@ class Login extends Component {
 
 				this.setState({ loading: null });
 				//console.log(saveData);
-				this.props.navigation.navigate('Home', {'auth': signInRequest.data.data.api_token});
+				this.props.authenticateUser(true);
+				this.props.navigation.navigate('Home');
 		} else {
 			this.setState({
 				errorMessage: 'Invalid login or registration credentials',
@@ -190,5 +193,19 @@ class Login extends Component {
   );
   }
 }
+
+const mapStateToProps = (state) => {
+  return { state: state }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticateUser: (data) => {
+      dispatch(loginUser(data))
+    }
+  }
+};
+
+const Login = connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
 
 export default Login;
