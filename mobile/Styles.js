@@ -1,11 +1,8 @@
 import { StyleSheet } from "react-native"
 
 export default StyleSheet.create({
-  bg1: {
+  backRed: {
     backgroundColor: 'red',
-  },
-  bg2: {
-
   },
   body: {
     height: '92%'
@@ -23,28 +20,6 @@ export default StyleSheet.create({
     display: 'flex',
     flex: 1,
     flexDirection: 'column'
-  },
-  font1: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-  },
-  font2: {
-    color: 'red',
-    fontSize: 17,
-    fontWeight: 'bold',
-    padding: 12,
-  },
-  fontE: {
-    color: 'red',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  fontOk: {
-    color: 'green',
-    fontSize: 12,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   header: {
     display: 'flex',
@@ -74,6 +49,11 @@ export default StyleSheet.create({
     height: 120,
     width: 155,
     opacity: 1,
+  },
+  imageMenu: {
+    height: '100%',
+    width: '100%',
+    opacity: 0.9,
   },
   input: {
   borderRadius: 5,
@@ -109,15 +89,69 @@ export default StyleSheet.create({
     justifyContent: 'center',
     zIndex: 1,
   },
+  menuFooter: {
+    justifyContent: 'center',
+    height: '5%',
+    backgroundColor: 'red',
+    paddingLeft: 10
+  },
+  menuHeader: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '35%',
+    borderColor: 'red',
+  },
+  menuIcon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 10
+  },
+  menuItems: {
+    height: '60%',
+    backgroundColor: 'red',
+  },
+  navItem: {
+    borderColor: '#FF7777',
+    borderBottomWidth: 1,
+    paddingLeft: 35,
+    paddingBottom: 10,
+    paddingTop: 10
+  },
   tableIndex: {
     height: '50%',
     width: '90%',
-    backgroundColor: 'red',
   },
   text: {
-    color: 'white',
+  },
+  textH1: {
     fontSize: 35,
     fontFamily: 'cursive',
+    fontWeight: 'bold',
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  textColorBlack: {
+    color: 'black',
+  },
+  textColorGreen: {
+    color: 'green',
+  },
+  textColorRed: {
+    color: 'red',
+  },
+  textColorRedPale: {
+    color: '#FFE0E0',
+  },
+  textColorWhite: {
+    color: 'white',
+  },
+  textSizeMedium: {
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  textSizeSmall: {
+    fontSize: 12,
     fontWeight: 'bold',
   },
   touchable: {

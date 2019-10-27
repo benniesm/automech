@@ -10,8 +10,10 @@ import {
 import multiSet from '../store/AsyncStorage/SetItems';
 import { connect } from 'react-redux';
 import { loginUser } from '../store/Redux/actions/AuthAction';
+import { loadingOff, loadingOn } from '../store/Redux/actions/LoadingAction';
 import fetchApi from '../api/Fetch';
 import styles from '../../Styles.js';
+import Header from '../components/Header';
 import Loading from '../components/Loading';
 
 class LoginContainer extends Component {
@@ -23,7 +25,6 @@ class LoginContainer extends Component {
 			codes: {'NG': '234'},
 			confirm:'Send confirmation code',
 			errorMessage: '',
-			loading: null,
 			mobile: null,
 			mobilePhone: '',
 			msg: null,
@@ -31,10 +32,6 @@ class LoginContainer extends Component {
 			registered: false,
 		}
 	}
-
-  componentDidMount() {
-
-  }
 
 	/* |Disabled Feature |
   getCountryCodes = async() => {
@@ -44,9 +41,10 @@ class LoginContainer extends Component {
 	*/
 
 	sendConfirmation = async() => {
+		this.props.loadOn();
+
 	//console.log('confirmRequest');
 		this.setState({
-			loading: <View style={styles.loading}><Loading /></View>,
 			confirm: 'Resend code',
 			errorMessage: '',
 			okMessage: '',
@@ -66,19 +64,20 @@ class LoginContainer extends Component {
 				mobile: confirmRequest.data.data.mobile,
 				registered: confirmRequest.data.data.registered,
 				okMessage: 'Code sent!\nMake sure DND is disabled on your line.',
-				loading: null,
 			});
+			this.props.loadOff();
 		} else {
 			this.setState({
 				errorMessage: 'Unable to complete, Please try again.',
-				loading: null,
 			});
+			this.props.loadOff();
 		}
 	}
 
 	signIn = async() => {
+		this.props.loadOn();
+
 		this.setState({
-			loading: <View style={styles.loading}><Loading /></View>,
 			errorMessage: '',
 			okMessage: '',
 		});
@@ -86,15 +85,15 @@ class LoginContainer extends Component {
 		if ('234' + parseInt(this.state.mobilePhone) !== this.state.mobile) {
 			this.setState({
 				errorMessage: 'Resend confirmation code to the changed the number',
-				loading: null,
 			});
+			this.props.loadOff();
 			return;
 		}
 		if (this.state.codeConfirm != this.state.code) {
 			this.setState({
 				errorMessage: 'The code you entered is incorrect',
-				loading: null,
 			});
+			this.props.loadOff();
 			return;
 		}
 
@@ -122,89 +121,119 @@ class LoginContainer extends Component {
 				];
 				const saveData = multiSet(authData);
 
-				this.setState({ loading: null });
 				//console.log(saveData);
-				this.props.authenticateUser(true);
+				this.props.authenticateUser();
+				this.props.loadOff();
 				this.props.navigation.navigate('Home');
 		} else {
 			this.setState({
 				errorMessage: 'Invalid login or registration credentials',
-				loading: null,
 			});
+			this.props.loadOff();
 		}
 	}
 
   render() {
+
 	/*|Disabled Feature|
 	let codes = Object.values(this.state.codes).sort();
 	let countryCodes = countryCodes.map((c) => {
 		return <Picker.Item label={c} value={c} />
 	});
 	*/
-  return (
-		<>
-			<View style={styles.mainContent}>
-				<View>
-					<Text style={styles.font2}>Confirm Your Phone Number</Text>
-				</View>
-				<View style={styles.horizontalContent}>
-					<Text
-		        style={Object.assign({}, styles.input, styles.inputText)}>
-						+234
-		      </Text>
-		      <TextInput
-						name='mobilePhone'
-						keyboardType='numeric'
-						onChangeText={(text) => this.setState({ mobilePhone: text })}
-						style={Object.assign({}, styles.input, styles.inputText2)}
-		        placeholder='Enter digits, No Symbols'
-		        value={this.state.mobilePhone}>
-		      </TextInput>
-				</View>
-				<TouchableHighlight
-					underlayColor='#cbcbcb'
-					style={styles.touchable}
-					onPress={() => this.sendConfirmation()}>
-					<Text style={styles.buttonSmall}>{this.state.confirm}</Text>
-				</TouchableHighlight>
-				<Text style={styles.fontOk}>{this.state.okMessage}</Text>
-				<Text style={styles.fontE}>{this.state.errorMessage}</Text>
-				<View>
-		      <TextInput
-						name='codeConfirm'
-						keyboardType='numeric'
-						onChangeText={(text) => this.setState({codeConfirm: text})}
-						style={Object.assign({}, styles.input, styles.inputText3)}
-		        placeholder='Enter code here'
-		        value={this.state.codeConfirm}>
-		      </TextInput>
-				</View>
-				<View>
-					<Button
-						title="SIGN IN"
-						color="red"
-						style={styles.button}
-						onPress={() => this.signIn()}
-					/>
-				</View>
-	    </View>
-			{this.state.loading}
-		</>
-  );
+
+  return this.props.state.load.loading === true ?
+		<View style={styles.loading}><Loading /></View>
+	:
+		(
+			<>
+				<View style={styles.mainContent}>
+					<View>
+						<Text style={Object.assign(
+							{},
+							styles.textSizeMedium,
+							styles.textColorRed,
+							styles.textCenter
+							)}>
+								Confirm Your Phone Number
+							</Text>
+					</View>
+					<View style={styles.horizontalContent}>
+						<Text
+			        style={Object.assign({}, styles.input, styles.inputText)}>
+							+234
+			      </Text>
+			      <TextInput
+							name='mobilePhone'
+							keyboardType='numeric'
+							onChangeText={(text) => this.setState({ mobilePhone: text })}
+							style={Object.assign({}, styles.input, styles.inputText2)}
+			        placeholder='Enter digits, No Symbols'
+			        value={this.state.mobilePhone}>
+			      </TextInput>
+					</View>
+					<TouchableHighlight
+						underlayColor='#cbcbcb'
+						style={styles.touchable}
+						onPress={() => this.sendConfirmation()}>
+						<Text style={styles.buttonSmall}>{this.state.confirm}</Text>
+					</TouchableHighlight>
+					<Text style={Object.assign(
+						{},
+						styles.textSizeSmall,
+						styles.textColorGreen,
+						styles.textCenter
+						)}>
+							{this.state.okMessage}
+						</Text>
+					<Text style={Object.assign(
+						{},
+						styles.textSizeSmall,
+						styles.textColorRed
+						)}>
+							{this.state.errorMessage}
+					</Text>
+					<View>
+			      <TextInput
+							name='codeConfirm'
+							keyboardType='numeric'
+							onChangeText={(text) => this.setState({codeConfirm: text})}
+							style={Object.assign({}, styles.input, styles.inputText3)}
+			        placeholder='Enter code here'
+			        value={this.state.codeConfirm}>
+			      </TextInput>
+					</View>
+					<View>
+						<Button
+							title="SIGN IN"
+							color="red"
+							style={styles.button}
+							onPress={() => this.signIn()}
+						/>
+					</View>
+		    </View>
+			</>
+	  )
   }
 }
 
 const mapStateToProps = (state) => {
   return { state: state }
-};
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    authenticateUser: (data) => {
-      dispatch(loginUser(data))
+    authenticateUser: () => {
+      dispatch(loginUser())
+    },
+    loadOn: () => {
+      dispatch(loadingOn())
+    },
+    loadOff: () => {
+      dispatch(loadingOff())
     }
   }
-};
+}
 
 const Login = connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
 

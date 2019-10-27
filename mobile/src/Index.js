@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Button,
-  Image,
   Text,
   TouchableHighlight,
   View,
@@ -19,10 +17,14 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import multiGet from './store/AsyncStorage/GetItems';
 import { connect } from 'react-redux';
+import { loadingOff, loadingOn } from './store/Redux/actions/LoadingAction';
+import { pageTitle } from './store/Redux/actions/PageAction';
 import { loginUser } from './store/Redux/actions/AuthAction';
-import styles from '../Styles.js';
 import fetchApi from './api/Fetch';
-import Login from './auth/Login';
+import styles from '../Styles.js';
+import Header from './components/Header';
+import Loading from './components/Loading';
+import SignInButton from './components/SignInButton';
 
 class Container extends Component {
 	constructor(props) {
@@ -30,14 +32,13 @@ class Container extends Component {
 	}
 
   componentDidMount() {
+    this.props.pageName('Welcome!');
     this.getProfile();
   }
 
-  goToSignIn() {
-    this.props.navigation.navigate('Sign');
-  }
-
   getProfile = async() => {
+    this.props.loadOn();
+
     const authData = ['id', 'mobile_phone', 'name', 'email', 'api_token'];
     const getData = await multiGet(authData);
     //console.log(getData);
@@ -48,8 +49,11 @@ class Container extends Component {
       'get',
       {'url': 'profile', 'fetchId': userId, 'data': ''}
     );
+
+    this.props.loadOff();
+
     if (myProfile.data.hasOwnProperty('api_token') && myProfile.data.api_token === token) {
-      this.props.authenticateUser(true);
+      this.props.authenticateUser();
     } else {
       this.props.navigation.navigate('Sign');
     }
@@ -57,6 +61,10 @@ class Container extends Component {
     //console.log({'profileToken': myProfile.data.api_token});
     //console.log({'token': token});
     //console.log(this.props.state.auth.authenticated);
+  }
+
+  goToSignIn = () => {
+    this.props.navigation.navigate('Sign');
   }
 
   render() {
@@ -67,22 +75,25 @@ class Container extends Component {
     ];
 
     return this.props.state.auth.authenticated === true ?
-      (
-        <View style={Object.assign({}, styles.window, styles.bg2)}>
-          <Table style={styles.tableIndex}>
-            <Rows data={screens} />
-          </Table>
-        </View>
-      )
+      this.props.state.load.loading === true ?
+        <View style={styles.loading}><Loading /></View>
       :
+        (
+          <>
+            <Header
+              drawer={this.props.navigation.openDrawer}
+              page={this.props.state.page} />
+            <View style={Object.assign({}, styles.window, styles.bg2)}>
+              <Table style={styles.tableIndex}>
+                <Rows data={screens} />
+              </Table>
+            </View>
+          </>
+        )
+    :
       (
         <View>
-  				<TouchableHighlight
-  					underlayColor='#cbcbcb'
-  					style={styles.touchable}
-  					onPress={() => this.goToSignIn()}>
-  					<Text style={styles.buttonSmall}>Tap Here To Sign In</Text>
-  				</TouchableHighlight>
+  				<SignInButton goTo={() => this.goToSignIn()} />
         </View>
       )
   }
@@ -90,15 +101,24 @@ class Container extends Component {
 
 const mapStateToProps = (state) => {
   return { state: state }
-};
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    authenticateUser: (data) => {
-      dispatch(loginUser(data))
+    authenticateUser: () => {
+      dispatch(loginUser())
+    },
+    loadOn: () => {
+      dispatch(loadingOn())
+    },
+    loadOff: () => {
+      dispatch(loadingOff())
+    },
+    pageName: (name) => {
+      dispatch(pageTitle(name))
     }
   }
-};
+}
 
 const Index = connect(mapStateToProps, mapDispatchToProps)(Container);
 
