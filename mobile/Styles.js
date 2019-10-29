@@ -1,8 +1,17 @@
 import { StyleSheet } from "react-native"
 
 export default StyleSheet.create({
+  backGray: {
+    backgroundColor: 'gray',
+  },
+  backOrange: {
+    backgroundColor: 'orange',
+  },
   backRed: {
     backgroundColor: 'red',
+  },
+  backRedPale: {
+    backgroundColor: '#FFE0E0'
   },
   body: {
     height: '92%'
@@ -27,9 +36,15 @@ export default StyleSheet.create({
     backgroundColor: 'red',
     height: '8%',
   },
+  headerIcons: {
+    paddingLeft: 20,
+    paddingRight: 20
+  },
   headerTitle: {
     height: '100%',
     width: '83%',
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -69,6 +84,9 @@ export default StyleSheet.create({
   },
   inputText2: {
     width: '55%',
+  },
+  inputText3: {
+    width: '80%',
   },
   loading: {
     backgroundColor: '#fff',
@@ -123,13 +141,16 @@ export default StyleSheet.create({
   },
   text: {
   },
+  textPadded: {
+    padding: 10
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
   textH1: {
     fontSize: 35,
     fontFamily: 'cursive',
     fontWeight: 'bold',
-  },
-  textCenter: {
-    textAlign: 'center',
   },
   textColorBlack: {
     color: 'black',
@@ -150,15 +171,18 @@ export default StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
   },
+  textSizeMediumNormal: {
+    fontSize: 17,
+  },
   textSizeSmall: {
     fontSize: 12,
     fontWeight: 'bold',
   },
   touchable: {
-    backgroundColor: '#e9e9e9',
-    marginBottom: 30,
-    marginTop: 12,
+    marginBottom: 5,
+    marginTop: 10,
     padding: 8,
+    borderRadius: 5
   },
   welcome: {
     alignItems: 'center',

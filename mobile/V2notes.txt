@@ -1,0 +1,3 @@
+* Enable option to change Mobile Phone Number
+* Enable International Mode to import country call codes
+* Enable forward and back navigation

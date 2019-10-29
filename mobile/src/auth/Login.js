@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import multiSet from '../store/AsyncStorage/SetItems';
 import { connect } from 'react-redux';
-import { loginUser } from '../store/Redux/actions/AuthAction';
-import { loadingOff, loadingOn } from '../store/Redux/actions/LoadingAction';
+import {
+  mapStateToProps,
+  mapDispatchToProps
+} from '../store/Redux/StateDispatch';
 import fetchApi from '../api/Fetch';
 import styles from '../../Styles.js';
 import Header from '../components/Header';
@@ -214,24 +216,6 @@ class LoginContainer extends Component {
 		    </View>
 			</>
 	  )
-  }
-}
-
-const mapStateToProps = (state) => {
-  return { state: state }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    authenticateUser: () => {
-      dispatch(loginUser())
-    },
-    loadOn: () => {
-      dispatch(loadingOn())
-    },
-    loadOff: () => {
-      dispatch(loadingOff())
-    }
   }
 }
 

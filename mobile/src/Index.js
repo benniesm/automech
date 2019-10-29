@@ -17,9 +17,10 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import multiGet from './store/AsyncStorage/GetItems';
 import { connect } from 'react-redux';
-import { loadingOff, loadingOn } from './store/Redux/actions/LoadingAction';
-import { pageTitle } from './store/Redux/actions/PageAction';
-import { loginUser } from './store/Redux/actions/AuthAction';
+import {
+  mapStateToProps,
+  mapDispatchToProps
+} from './store/Redux/StateDispatch';
 import fetchApi from './api/Fetch';
 import styles from '../Styles.js';
 import Header from './components/Header';
@@ -32,7 +33,6 @@ class Container extends Component {
 	}
 
   componentDidMount() {
-    this.props.pageName('Welcome!');
     this.getProfile();
   }
 
@@ -82,7 +82,7 @@ class Container extends Component {
           <>
             <Header
               drawer={this.props.navigation.openDrawer}
-              page={this.props.state.page} />
+              page='Welcome!' />
             <View style={Object.assign({}, styles.window, styles.bg2)}>
               <Table style={styles.tableIndex}>
                 <Rows data={screens} />
@@ -96,27 +96,6 @@ class Container extends Component {
   				<SignInButton goTo={() => this.goToSignIn()} />
         </View>
       )
-  }
-}
-
-const mapStateToProps = (state) => {
-  return { state: state }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    authenticateUser: () => {
-      dispatch(loginUser())
-    },
-    loadOn: () => {
-      dispatch(loadingOn())
-    },
-    loadOff: () => {
-      dispatch(loadingOff())
-    },
-    pageName: (name) => {
-      dispatch(pageTitle(name))
-    }
   }
 }
 

@@ -15,7 +15,6 @@ class Header extends Component {
 
   showMenu = () => {
     this.props.drawer();
-    console.log(this.props);
   }
 
   render() {
@@ -29,14 +28,28 @@ class Header extends Component {
               onPress={() => this.showMenu()} />
             </View>
             <View style={styles.headerTitle}>
-              <Text style={Object.assign(
-      					{},
-      					styles.textSizeMedium,
-      					styles.textColorWhite,
-      					styles.textCenter
-      					)}>
-                {this.props.page}
-                </Text>
+              <View style={styles.headerIcons}>
+                <Icon
+                name='chevron-left'
+                color='maroon'
+                size={35} />
+              </View>
+              <View>
+                <Text style={Object.assign(
+        					{},
+        					styles.textSizeMedium,
+        					styles.textColorWhite,
+        					styles.textCenter
+        					)}>
+                  {this.props.page}
+                  </Text>
+                </View>
+                <View style={styles.headerIcons}>
+                  <Icon
+                  name='chevron-right'
+                  color='maroon'
+                  size={35} />
+                </View>
             </View>
           </View>
     )

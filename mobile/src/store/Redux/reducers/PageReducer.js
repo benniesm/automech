@@ -1,15 +1,13 @@
-import { pageTitle } from '../actions/PageAction';
+import { viewData } from '../actions/PageAction';
 
 const defaultState = {
-  title: 'AutoMech'
+  view: {}
 };
-
-const TITLE = 'TITLE';
 
 const pageReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case TITLE:
-      return action.title;
+    case 'UPDATE':
+      return action.view;
     default:
       return state;
   }

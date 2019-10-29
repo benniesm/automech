@@ -8,9 +8,10 @@ import {
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { logoutUser } from '../../../store/Redux/actions/AuthAction';
-import { loadingOff, loadingOn } from '../../../store/Redux/actions/LoadingAction';
-import { pageTitle } from '../../../store/Redux/actions/PageAction';
+import {
+  mapStateToProps,
+  mapDispatchToProps
+} from '../../../store/Redux/StateDispatch';
 import multiGet from '../../../store/AsyncStorage/GetItems';
 import multiRemove from '../../../store/AsyncStorage/RemoveItems';
 import fetchApi from '../../../api/Fetch';
@@ -28,7 +29,6 @@ class ViewBasicProfileContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.pageName('My Profile');
     this.getProfile();
   }
 
@@ -48,6 +48,7 @@ class ViewBasicProfileContainer extends Component {
     this.setState({
       profileData: myProfile.data
     });
+    this.props.viewInfo(this.state.profileData);
 
     this.props.loadOff();
   }
@@ -69,7 +70,7 @@ class ViewBasicProfileContainer extends Component {
       'api_token'
     ]
     let removeAuth = multiRemove(authKeys);
-    this.props.authenticateUser();
+    this.props.deAuthenticateUser();
   }
 
   signOutConfirm = () => {
@@ -93,42 +94,51 @@ class ViewBasicProfileContainer extends Component {
           <Text style={Object.assign(
             {},
             styles.textSizeMedium,
-            styles.textCenter
+            styles.textCenter,
+            styles.textPadded
             )}>
               MOBILE PHONE:
           </Text>
           <Text style={Object.assign(
             {},
-            styles.textSizeMedium,
-            styles.textCenter
+            styles.textSizeMediumNormal,
+            styles.textCenter,
+            styles.textPadded,
+            styles.backRedPale
             )}>
               {this.state.profileData.mobile_phone}
           </Text>
           <Text style={Object.assign(
             {},
             styles.textSizeMedium,
-            styles.textCenter
+            styles.textCenter,
+            styles.textPadded
             )}>
               NAME:
           </Text>
           <Text style={Object.assign(
             {},
-            styles.textSizeMedium,
-            styles.textCenter
+            styles.textSizeMediumNormal,
+            styles.textCenter,
+            styles.textPadded,
+            styles.backRedPale
             )}>
               {this.state.profileData.name}
           </Text>
           <Text style={Object.assign(
             {},
             styles.textSizeMedium,
-            styles.textCenter
+            styles.textCenter,
+            styles.textPadded
             )}>
               EMAIL:
           </Text>
           <Text style={Object.assign(
             {},
-            styles.textSizeMedium,
-            styles.textCenter
+            styles.textSizeMediumNormal,
+            styles.textCenter,
+            styles.textPadded,
+            styles.backRedPale
             )}>
               {this.state.profileData.email}
           </Text>
@@ -144,50 +154,32 @@ class ViewBasicProfileContainer extends Component {
           <>
             <Header
               drawer={this.props.navigation.openDrawer}
-              page={this.props.state.page} />
+              page='User Information' />
             <View style={Object.assign({}, styles.window, )}>
               <ScrollView style={styles.view}>
                 {profile()}
+                <TouchableHighlight
+                  underlayColor='#cbcbcb'
+                  style={Object.assign({}, styles.touchable, styles.backOrange)}
+                  onPress={() => this.showViewUpdate()}>
+                  <Text style={styles.buttonSmall}>Update Information</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  underlayColor='#cbcbcb'
+                  style={Object.assign({}, styles.touchable, styles.backRed)}
+                  onPress={() => this.signOutConfirm()}>
+                  <Text style={styles.buttonSmall}>Sign Out</Text>
+                </TouchableHighlight>
               </ScrollView>
-              <TouchableHighlight
-                underlayColor='#cbcbcb'
-                style={styles.touchable}
-                onPress={() => this.showViewUpdate()}>
-                <Text style={styles.buttonSmall}>Update Information</Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                underlayColor='#cbcbcb'
-                style={styles.touchable}
-                onPress={() => this.signOutConfirm()}>
-                <Text style={styles.buttonSmall}>Sign Out</Text>
-              </TouchableHighlight>
             </View>
           </>
         )
-    :
-      (
-        <View>
-          <SignInButton goTo={() => this.goToSignIn()} />
-        </View>
-      )
-  }
-}
-
-const mapStateToProps = (state) => {
-  return { state: state }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadOn: () => {
-      dispatch(loadingOn())
-    },
-    loadOff: () => {
-      dispatch(loadingOff())
-    },
-    pageName: (name) => {
-      dispatch(pageTitle(name))
-    }
+      :
+        (
+          <View>
+            <SignInButton goTo={() => this.goToSignIn()} />
+          </View>
+        )
   }
 }
 

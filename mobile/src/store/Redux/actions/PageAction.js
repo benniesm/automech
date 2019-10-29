@@ -1,8 +1,8 @@
-const pageTitle = (name) => {
+const viewData = (data) => {
   return {
-    type: 'TITLE',
-    title: name
+    type: 'UPDATE',
+    view: data
   }
 }
 
-export { pageTitle };
+export { viewData };
