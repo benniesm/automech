@@ -88,11 +88,29 @@ const postApi = async(params) => {
 
 //if response error
 
-function putApi(params) {
+const putApi = async(params) => {
   let url = fetchUrl(params.url);
   let view = '/' + params.fetchId;
 
-  fetch().then().then().catch();
+  const authData = await getAuthData();
+  const token = authData[4][1];
+
+  const response = await fetch(url + view + '?&api_token=' + token, {
+    method: 'PUT',
+    headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params.body)
+  }).catch(err => {
+    throw {'status': 0, 'data': err};
+  });
+  const jsonStatus = await response.status;
+  const jsonData = await response.json();
+  if (jsonStatus >= 300) {
+    return {'status': jsonStatus, 'data': jsonData};
+  }
+  return {'status': jsonStatus, 'data': jsonData};
 }
 
 function deleteApi(params) {

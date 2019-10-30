@@ -39,16 +39,14 @@ class ViewBasicProfileContainer extends Component {
     const getData = await multiGet(authData);
 
     let userId = getData[0][1];
-    let token = getData[4][1];
+    console.log(getData);
 
     let myProfile = await fetchApi.fetchNow(
       'get',
       {'url': 'profile', 'fetchId': userId, 'data': ''}
     );
-    this.setState({
-      profileData: myProfile.data
-    });
-    this.props.viewInfo(this.state.profileData);
+
+    this.props.viewInfo(myProfile.data);
 
     this.props.loadOff();
   }
@@ -106,7 +104,7 @@ class ViewBasicProfileContainer extends Component {
             styles.textPadded,
             styles.backRedPale
             )}>
-              {this.state.profileData.mobile_phone}
+              {this.props.state.page.mobile_phone}
           </Text>
           <Text style={Object.assign(
             {},
@@ -123,7 +121,7 @@ class ViewBasicProfileContainer extends Component {
             styles.textPadded,
             styles.backRedPale
             )}>
-              {this.state.profileData.name}
+              {this.props.state.page.name}
           </Text>
           <Text style={Object.assign(
             {},
@@ -140,7 +138,7 @@ class ViewBasicProfileContainer extends Component {
             styles.textPadded,
             styles.backRedPale
             )}>
-              {this.state.profileData.email}
+              {this.props.state.page.email}
           </Text>
         </View>
       )
@@ -162,7 +160,7 @@ class ViewBasicProfileContainer extends Component {
                   underlayColor='#cbcbcb'
                   style={Object.assign({}, styles.touchable, styles.backOrange)}
                   onPress={() => this.showViewUpdate()}>
-                  <Text style={styles.buttonSmall}>Update Information</Text>
+                  <Text style={styles.buttonSmall}>Press Here to Update Information</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
                   underlayColor='#cbcbcb'
