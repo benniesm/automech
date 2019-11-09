@@ -13,7 +13,13 @@ class SignInButton extends Component {
         underlayColor='#cbcbcb'
         style={styles.touchable}
         onPress={() => this.props.goTo()}>
-        <Text style={styles.buttonSmall}>Tap Here To Sign In</Text>
+        <Text style={Object.assign(
+          {},
+          styles.touchable,
+          styles.backViolet,
+          styles.buttonSmall)}>
+          Press Here To Sign In
+        </Text>
       </TouchableHighlight>
     )
   }

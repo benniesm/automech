@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
 import {
-	Button,
 	Picker,
 	TouchableHighlight,
 	Text,
 	TextInput,
 	View,Image
 } from 'react-native';
-import multiSet from '../store/AsyncStorage/SetItems';
 import { connect } from 'react-redux';
 import {
   mapStateToProps,
   mapDispatchToProps
-} from '../store/Redux/StateDispatch';
+} from '../store/StateDispatch';
 import fetchApi from '../api/Fetch';
 import styles from '../../Styles.js';
 import Header from '../components/Header';
@@ -25,7 +23,7 @@ class LoginContainer extends Component {
 			code: null,
 			codeConfirm: '',
 			codes: {'NG': '234'},
-			confirm:'Send confirmation code',
+			confirm: 'Send confirmation code',
 			errorMessage: '',
 			mobile: null,
 			mobilePhone: '',
@@ -43,7 +41,10 @@ class LoginContainer extends Component {
 	*/
 
 	sendConfirmation = async() => {
-		this.props.loadOn();
+		if (this.state.mobilePhone === '') {
+			this.setState({ errorMessage: 'Type a valid phone number!'});
+			return;
+		}
 
 	//console.log('confirmRequest');
 		this.setState({
@@ -54,10 +55,12 @@ class LoginContainer extends Component {
 
 		let mobile_number = '234' + parseInt(this.state.mobilePhone);
 
+		this.props.loadOn();
 		let confirmRequest = await fetchApi.fetchNow(
 			'get',
 			{'url': 'confirm-code', 'data': 'mobile=' + mobile_number}
 		).catch(e => console.console.log(e));
+		this.props.loadOff();
 		console.log(confirmRequest);
 
 		if (confirmRequest.status === 200) {
@@ -67,17 +70,18 @@ class LoginContainer extends Component {
 				registered: confirmRequest.data.data.registered,
 				okMessage: 'Code sent!\nMake sure DND is disabled on your line.',
 			});
-			this.props.loadOff();
 		} else {
 			this.setState({
 				errorMessage: 'Unable to complete, Please try again.',
 			});
-			this.props.loadOff();
 		}
 	}
 
 	signIn = async() => {
-		this.props.loadOn();
+		if (this.state.mobilePhone === '' || this.state.code === null) {
+			this.setState({ errorMessage: 'Provide required information'});
+			return;
+		}
 
 		this.setState({
 			errorMessage: '',
@@ -100,6 +104,8 @@ class LoginContainer extends Component {
 		}
 
 		const url = () => this.state.registered === true ? 'login' : 'register';
+
+		this.props.loadOn();
 		let signInRequest = await fetchApi.fetchNow(
 			'post',
 			{
@@ -111,27 +117,40 @@ class LoginContainer extends Component {
 				}
 			}
 		);
-		console.log(signInRequest);
+		this.props.loadOff();
+
+		//console.log(signInRequest);
 		if (signInRequest.status === 200
 			|| signInRequest.status === 201) {
-				const authData = [
-					['id', signInRequest.data.data.id.toString()],
-					['mobile_phone', signInRequest.data.data.mobile_phone],
-					['name', signInRequest.data.data.name],
-					['email', signInRequest.data.data.email],
-					['api_token', signInRequest.data.data.api_token]
-				];
-				const saveData = multiSet(authData);
+				console.log(signInRequest.data.data)
+				const data = signInRequest.data.data;
+				const authData = {
+					'id': data.id.toString(),
+					'mobilePhone': data.mobile_phone,
+					'name': data.name,
+					'email': data.email,
+					'apiToken': data.api_token,
+					'emailVerified': data.email_verified_at,
+					'createdAt': data.created_at,
+					'vendor': data.vendor
+				};
 
-				//console.log(saveData);
-				this.props.authenticateUser();
-				this.props.loadOff();
+				//console.log(this.props.state);
+				if (data.vendor !== null) {
+					this.props.vendOn();
+				}
+				this.props.authenticateUser(authData);
+				this.setState({
+					mobilePhone: '',
+					codeConfirm: '',
+					confirm: 'Send confirmation code'
+				});
+
 				this.props.navigation.navigate('Home');
 		} else {
 			this.setState({
 				errorMessage: 'Invalid login or registration credentials',
 			});
-			this.props.loadOff();
 		}
 	}
 
@@ -176,7 +195,11 @@ class LoginContainer extends Component {
 					</View>
 					<TouchableHighlight
 						underlayColor='#cbcbcb'
-						style={styles.touchable}
+						style={Object.assign(
+							{},
+							styles.touchable,
+							styles.backOrange
+							)}
 						onPress={() => this.sendConfirmation()}>
 						<Text style={styles.buttonSmall}>{this.state.confirm}</Text>
 					</TouchableHighlight>
@@ -206,12 +229,15 @@ class LoginContainer extends Component {
 			      </TextInput>
 					</View>
 					<View>
-						<Button
-							title="SIGN IN"
-							color="red"
-							style={styles.button}
-							onPress={() => this.signIn()}
-						/>
+						<TouchableHighlight
+							style={Object.assign(
+								{},
+								styles.touchable,
+								styles.backViolet
+								)}
+							onPress={() => this.signIn()}>
+								<Text style={styles.buttonSmall}>SIGN IN</Text>
+						</TouchableHighlight>
 					</View>
 		    </View>
 			</>

@@ -15,14 +15,13 @@ import {
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
-import multiGet from './store/AsyncStorage/GetItems';
 import { connect } from 'react-redux';
 import {
   mapStateToProps,
   mapDispatchToProps
-} from './store/Redux/StateDispatch';
+} from './store/StateDispatch';
 import fetchApi from './api/Fetch';
-import styles from '../Styles.js';
+import styles from '../Styles';
 import Header from './components/Header';
 import Loading from './components/Loading';
 import SignInButton from './components/SignInButton';
@@ -37,30 +36,29 @@ class Container extends Component {
   }
 
   getProfile = async() => {
+    const profileData = this.props.state.auth.profile;
+    if (profileData === null) {
+      this.props.loadOff();
+      this.props.navigation.navigate('Sign');
+      return;
+    }
+    console.log(this.props);
+
     this.props.loadOn();
-
-    const authData = ['id', 'mobile_phone', 'name', 'email', 'api_token'];
-    const getData = await multiGet(authData);
-    //console.log(getData);
-    let userId = getData[0][1];
-    let token = getData[4][1];
-
     let myProfile = await fetchApi.fetchNow(
       'get',
-      {'url': 'profile', 'fetchId': userId, 'data': ''}
+      {
+        'url': 'profile',
+        'fetchId': profileData.id,
+        'data': '',
+        'token': profileData.apiToken
+      }
     );
-
     this.props.loadOff();
 
-    if (myProfile.data.hasOwnProperty('api_token') && myProfile.data.api_token === token) {
-      this.props.authenticateUser();
-    } else {
+    if (myProfile.status !== 200) {
       this.props.navigation.navigate('Sign');
     }
-    //console.log(myProfile.data);
-    //console.log({'profileToken': myProfile.data.api_token});
-    //console.log({'token': token});
-    //console.log(this.props.state.auth.authenticated);
   }
 
   goToSignIn = () => {
@@ -74,10 +72,10 @@ class Container extends Component {
       ['Tyres', 'Fuel Station', 'Towing Van'],
     ];
 
-    return this.props.state.auth.authenticated === true ?
-      this.props.state.load.loading === true ?
-        <View style={styles.loading}><Loading /></View>
+    return this.props.state.load.loading === true ?
+      <View style={styles.loading}><Loading /></View>
       :
+      this.props.state.auth.authenticated === true ?
         (
           <>
             <Header
@@ -90,12 +88,12 @@ class Container extends Component {
             </View>
           </>
         )
-    :
-      (
-        <View>
-  				<SignInButton goTo={() => this.goToSignIn()} />
-        </View>
-      )
+        :
+        (
+          <View>
+    				<SignInButton goTo={() => this.goToSignIn()} />
+          </View>
+        )
   }
 }
 

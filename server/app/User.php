@@ -19,6 +19,11 @@ class User extends Authenticatable
         'name', 'email', 'mobile_phone', 'password',
     ];
 
+    public function vendor()
+    {
+        return $this->hasOne(Vendor::class);
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

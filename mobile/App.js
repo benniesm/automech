@@ -13,7 +13,8 @@ import {
   Text,
 } from 'react-native';
 import { Provider } from 'react-redux';
-import store from './src/store/Redux/Store';
+import { persistor, store } from './src/store/Store';
+import { PersistGate } from 'redux-persist/lib/integration/react';
 import styles from './Styles.js';
 import Navigator from './src/Navigator';
 
@@ -30,9 +31,11 @@ const App: () => React$Node = () => {
   )
   :
   <Provider store={store}>
-    <View style={styles.container}>
-      <Navigator style={styles.body} />
-    </View>
+    <PersistGate persistor={persistor}>
+      <View style={styles.container}>
+        <Navigator style={styles.body} />
+      </View>
+    </PersistGate>
   </Provider>
 };
 

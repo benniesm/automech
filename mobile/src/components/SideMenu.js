@@ -44,6 +44,15 @@ class SideMenu extends Component {
             onPress={this.navigateToScreen('Profile')}>
               Profile
           </Text>
+          <Text style={Object.assign(
+  					{},
+            styles.navItem,
+  					styles.textSizeMedium,
+            styles.textColorRedPale
+  					)}
+            onPress={this.navigateToScreen('Vendor')}>
+              Vendor
+          </Text>
         </View>
         <View style={styles.menuFooter}>
           <Text style={Object.assign(

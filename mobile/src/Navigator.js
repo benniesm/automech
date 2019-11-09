@@ -5,8 +5,11 @@ import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import SideMenu from './components/SideMenu';
 import Index from './Index';
 import Login from './auth/Login';
-import ViewBasicProfile from './screens/profile/basic/View';
+import CreateVendorProfile from './screens/profile/vendor/Create';
 import UpdateBasicProfile from './screens/profile/basic/Update';
+import UpdateVendorProfile from './screens/profile/vendor/Update';
+import ViewBasicProfile from './screens/profile/basic/View';
+import ViewVendorProfile from './screens/profile/vendor/View';
 
 const MyDrawerNavigator = createDrawerNavigator({
   Home: {
@@ -15,12 +18,21 @@ const MyDrawerNavigator = createDrawerNavigator({
   Profile: {
     screen: ViewBasicProfile,
   },
+  createVendorProfile: {
+    screen: CreateVendorProfile,
+  },
   Sign: {
     screen: Login,
   },
-  update: {
+  updateBasicProfile: {
     screen: UpdateBasicProfile,
-  }
+  },
+  updateVendorProfile: {
+    screen: UpdateVendorProfile,
+  },
+  Vendor: {
+    screen: ViewVendorProfile,
+  },
 }, {
   contentComponent: SideMenu,
   drawerWidth: 250

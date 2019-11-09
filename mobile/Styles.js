@@ -13,6 +13,9 @@ export default StyleSheet.create({
   backRedPale: {
     backgroundColor: '#FFE0E0'
   },
+  backViolet: {
+    backgroundColor: '#FF0089'
+  },
   body: {
     height: '92%'
   },
@@ -29,6 +32,25 @@ export default StyleSheet.create({
     display: 'flex',
     flex: 1,
     flexDirection: 'column'
+  },
+  displayData: {
+    minWidth: '100%',
+    borderColor: 'white',
+    borderWidth: 1,
+    padding: 20
+  },
+  displayDataIndividual: {
+    minWidth: '100%',
+    borderColor: 'white',
+    borderWidth: 1,
+    padding: 20,
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  editIcon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '15%'
   },
   header: {
     display: 'flex',
@@ -87,6 +109,11 @@ export default StyleSheet.create({
   },
   inputText3: {
     width: '80%',
+  },
+  inputTextArea: {
+    height: 80,
+    width: '80%',
+    textAlign: 'left',
   },
   loading: {
     backgroundColor: '#fff',
@@ -178,10 +205,15 @@ export default StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
+  textSizeSmallNormal: {
+    fontSize: 13,
+  },
   touchable: {
     marginBottom: 5,
     marginTop: 10,
-    padding: 8,
+    marginLeft: 5,
+    marginRight: 5,
+    padding: 15,
     borderRadius: 5
   },
   welcome: {

@@ -11,9 +11,7 @@ import { connect } from 'react-redux';
 import {
   mapStateToProps,
   mapDispatchToProps
-} from '../../../store/Redux/StateDispatch';
-import multiGet from '../../../store/AsyncStorage/GetItems';
-import multiRemove from '../../../store/AsyncStorage/RemoveItems';
+} from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
@@ -28,35 +26,12 @@ class ViewBasicProfileContainer extends Component {
     }
   }
 
-  componentDidMount() {
-    this.getProfile();
-  }
-
-  getProfile = async() => {
-    this.props.loadOn();
-
-    const authData = ['id', 'mobile_phone', 'name', 'email', 'api_token'];
-    const getData = await multiGet(authData);
-
-    let userId = getData[0][1];
-    console.log(getData);
-
-    let myProfile = await fetchApi.fetchNow(
-      'get',
-      {'url': 'profile', 'fetchId': userId, 'data': ''}
-    );
-
-    this.props.viewInfo(myProfile.data);
-
-    this.props.loadOff();
-  }
-
   goToSignIn = () => {
     this.props.navigation.navigate('Sign');
   }
 
   showViewUpdate = () => {
-    this.props.navigation.navigate('update');
+    this.props.navigation.navigate('updateBasicProfile');
   }
 
   signOut = () => {
@@ -67,14 +42,17 @@ class ViewBasicProfileContainer extends Component {
       'email',
       'api_token'
     ]
-    let removeAuth = multiRemove(authKeys);
+    //let removeAuth = multiRemove(authKeys);
+    this.props.viewInfo({});
+    this.props.vendOff();
+    //this.props.vendorInfo({});
     this.props.deAuthenticateUser();
   }
 
   signOutConfirm = () => {
     Alert.alert(
       'YOU ARE ABOUT TO SIGN OUT!',
-      'You wil no longer be able to connect until sign in again',
+      'You will no longer be able to connect until sign in again',
       [
         {
           text: 'CANCEL',
@@ -86,60 +64,46 @@ class ViewBasicProfileContainer extends Component {
   }
 
   render() {
-    const profile = () => {
+    const profileData = this.props.state.auth.profile;
+    const Profile = () => {
       return (
         <View>
-          <Text style={Object.assign(
+          <View style={Object.assign(
             {},
-            styles.textSizeMedium,
-            styles.textCenter,
-            styles.textPadded
+            styles.backRedPale,
+            styles.displayData
             )}>
-              MOBILE PHONE:
-          </Text>
-          <Text style={Object.assign(
-            {},
-            styles.textSizeMediumNormal,
-            styles.textCenter,
-            styles.textPadded,
-            styles.backRedPale
-            )}>
-              {this.props.state.page.mobile_phone}
-          </Text>
-          <Text style={Object.assign(
-            {},
-            styles.textSizeMedium,
-            styles.textCenter,
-            styles.textPadded
-            )}>
-              NAME:
-          </Text>
-          <Text style={Object.assign(
-            {},
-            styles.textSizeMediumNormal,
-            styles.textCenter,
-            styles.textPadded,
-            styles.backRedPale
-            )}>
-              {this.props.state.page.name}
-          </Text>
-          <Text style={Object.assign(
-            {},
-            styles.textSizeMedium,
-            styles.textCenter,
-            styles.textPadded
-            )}>
-              EMAIL:
-          </Text>
-          <Text style={Object.assign(
-            {},
-            styles.textSizeMediumNormal,
-            styles.textCenter,
-            styles.textPadded,
-            styles.backRedPale
-            )}>
-              {this.props.state.page.email}
-          </Text>
+            <Text style={styles.textSizeMediumNormal}>
+                Mobile
+            </Text>
+            <Text style={styles.textSizeSmallNormal}>
+                {profileData.mobilePhone}
+            </Text>
+          </View>
+            <View style={Object.assign(
+              {},
+              styles.backRedPale,
+              styles.displayData
+              )}>
+              <Text style={styles.textSizeMediumNormal}>
+                  Name
+              </Text>
+              <Text style={styles.textSizeSmallNormal}>
+                  {profileData.name}
+              </Text>
+            </View>
+              <View style={Object.assign(
+                {},
+                styles.backRedPale,
+                styles.displayData
+                )}>
+                <Text style={styles.textSizeMediumNormal}>
+                    Email
+                </Text>
+                <Text style={styles.textSizeSmallNormal}>
+                    {profileData.email}
+                </Text>
+              </View>
         </View>
       )
     }
@@ -153,34 +117,56 @@ class ViewBasicProfileContainer extends Component {
             <Header
               drawer={this.props.navigation.openDrawer}
               page='User Information' />
-            <View style={Object.assign({}, styles.window, )}>
-              <ScrollView style={styles.view}>
-                {profile()}
-                <TouchableHighlight
-                  underlayColor='#cbcbcb'
-                  style={Object.assign({}, styles.touchable, styles.backOrange)}
-                  onPress={() => this.showViewUpdate()}>
-                  <Text style={styles.buttonSmall}>Press Here to Update Information</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  underlayColor='#cbcbcb'
-                  style={Object.assign({}, styles.touchable, styles.backRed)}
-                  onPress={() => this.signOutConfirm()}>
-                  <Text style={styles.buttonSmall}>Sign Out</Text>
-                </TouchableHighlight>
+            <View style={Object.assign({}, styles.window)}>
+              <ScrollView style={Object.assign(
+                {},
+                styles.view,
+                styles.backRedPale
+                )}>
+                <Profile />
+                <View style={Object.assign(
+                  {},
+                  styles.backRedPale,
+                  styles.displayData,
+                  { borderBottomWidth: 2 }
+                  )}>
+                    <TouchableHighlight
+                      underlayColor='#cbcbcb'
+                      style={Object.assign(
+                        {},
+                        styles.touchable,
+                        styles.backOrange
+                      )}
+                      onPress={() => this.showViewUpdate()}>
+                      <Text style={styles.buttonSmall}>Edit Profile</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                      underlayColor='#cbcbcb'
+                      style={Object.assign(
+                        {},
+                        styles.touchable,
+                        styles.backRed
+                      )}
+                      onPress={() => this.signOutConfirm()}>
+                      <Text style={styles.buttonSmall}>
+                        Sign Out of AutoMech
+                      </Text>
+                    </TouchableHighlight>
+                </View>
               </ScrollView>
             </View>
           </>
         )
-      :
-        (
-          <View>
-            <SignInButton goTo={() => this.goToSignIn()} />
-          </View>
-        )
+    :
+      (
+        <View>
+          <SignInButton goTo={() => this.goToSignIn()} />
+        </View>
+      )
   }
 }
 
-const ViewBasicProfile = connect(mapStateToProps, mapDispatchToProps)(ViewBasicProfileContainer);
+const ViewBasicProfile =
+  connect(mapStateToProps, mapDispatchToProps)(ViewBasicProfileContainer);
 
 export default ViewBasicProfile;

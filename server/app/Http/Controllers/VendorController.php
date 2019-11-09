@@ -14,7 +14,7 @@ class VendorController extends Controller
 
     public function show(Vendor $vendor)
     {
-        return $vendor;
+        return Vendor::with('user')->find($vendor);
     }
 
     public function store(Request $request)

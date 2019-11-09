@@ -1,7 +1,7 @@
 import { viewData } from '../actions/PageAction';
 
 const defaultState = {
-  view: {}
+  view: null,
 };
 
 const pageReducer = (state = defaultState, action) => {

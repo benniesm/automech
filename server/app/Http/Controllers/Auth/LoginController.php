@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use GuzzleHttp\Client;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -51,7 +52,7 @@ class LoginController extends Controller
 				    $user->generateToken();
 
 				    return response()->json([
-				        'data' => $user->toArray(),
+				        'data' => User::with('vendor')->find($user->id),
 				    ]);
 				}
 

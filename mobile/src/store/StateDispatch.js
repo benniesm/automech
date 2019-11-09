@@ -2,8 +2,9 @@ import {
   loadingOff,
   loadingOn
 } from './actions/LoadingAction';
-import { loginUser, logoutUser } from './actions/AuthAction';
+import { loginUser, logoutUser, profileUser } from './actions/AuthAction';
 import { viewData } from './actions/PageAction';
+import { vendorOn, vendorOff } from './actions/VendorAction';
 
 const mapStateToProps = (state) => {
   return { state: state }
@@ -22,6 +23,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadOff: () => {
       dispatch(loadingOff())
+    },
+    saveProfile: (data) => {
+      dispatch(profileUser(data))
+    },
+    vendOn: () => {
+      dispatch(vendorOn())
+    },
+    vendOff: () => {
+      dispatch(vendorOff())
     },
     viewInfo: (data) => {
       dispatch(viewData(data))

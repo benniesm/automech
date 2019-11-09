@@ -4,16 +4,13 @@ const defaultState = {
   loading: false
 };
 
-const ONLINE = 'ONLINE';
-const OFFLINE = 'OFFLINE';
-
 const loadingReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case ONLINE:
+    case 'ONLINE':
       return {
         loading: true
       }
-    case OFFLINE:
+    case 'OFFLINE':
       return {
         loading: false
       }

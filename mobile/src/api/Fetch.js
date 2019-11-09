@@ -1,11 +1,4 @@
 import { serverApi, countryCodes } from './Api';
-import multiGet from '../store/AsyncStorage/GetItems';
-
-const getAuthData = async() => {
-  const authData = ['id', 'mobile_phone', 'name', 'email', 'api_token'];
-  const getData = await multiGet(authData);
-  return getData;
-};
 
 function fetchUrl(urlName) {
   switch (urlName) {
@@ -33,8 +26,7 @@ const getApi = async(params) => {
     view = '/' + params.fetchId;
   }
 
-  const authData = await getAuthData();
-  const token = authData[4][1];
+  const token = params.token;
   //console.log(token);
 
   //console.log(url + view + '?' + params.data + '&api_token=' + token);
@@ -61,14 +53,11 @@ const postApi = async(params) => {
   if (params.hasOwnProperty('fetchId')) {
     view = '/' + params.fetchId;
   }
-
-  const authData = await getAuthData();
-  const token = authData[4][1];
   //console.log(token);
 
   //console.log(JSON.stringify(params.body));
   //console.log(url + view + '?&api_token=' + token);
-  const response = await fetch(url + view + '?&api_token=' + token, {
+  const response = await fetch(url + view, {
     method: 'POST',
     headers: {
 			'Accept': 'application/json',
@@ -92,10 +81,7 @@ const putApi = async(params) => {
   let url = fetchUrl(params.url);
   let view = '/' + params.fetchId;
 
-  const authData = await getAuthData();
-  const token = authData[4][1];
-
-  const response = await fetch(url + view + '?&api_token=' + token, {
+  const response = await fetch(url + view, {
     method: 'PUT',
     headers: {
 			'Accept': 'application/json',
