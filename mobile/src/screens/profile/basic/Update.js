@@ -16,7 +16,7 @@ class UpdateBasicProfileContainer extends Component {
     this.state = {
       email: view.email,
       errorMessage: '',
-      mobile: view.mobilePhone,
+      mobile: view.mobile_phone,
       name: view.name,
     }
   }
@@ -34,30 +34,20 @@ class UpdateBasicProfileContainer extends Component {
 					mobile_phone: this.state.mobile,
 					name : this.state.name,
 					email: this.state.email,
-          api_token: profileData.apiToken
+          api_token: profileData.api_token
 				}
 			}
 		);
     this.props.loadOff();
 
 		if (updateRequest.status === 200) {
-      const updatedData = updateRequest.data[0];
-      const newAuthData = {
-        'id': updatedData.id.toString(),
-        'mobilePhone': updatedData.mobile_phone,
-        'name': updatedData.name,
-        'email': updatedData.email,
-        'apiToken': updatedData.api_token,
-        'emailVerified': updatedData.email_verified_at,
-        'createdAt': updatedData.created_at,
-        'vendor': updatedData.vendor
-      };
-      this.props.saveProfile(newAuthData);
+      const updatedData = updateRequest.data;
+      this.props.saveProfile(updatedData);
       //console.log(updateRequest.data);
 
-				this.props.navigation.navigate('Profile');
+			this.props.navigation.navigate('Profile');
 		} else {
-      this.setState({ errorMessage: 'Request Error, Please try again' });
+      Alert.alert('Request Error, Please try again');
     }
   }
 
@@ -87,6 +77,7 @@ class UpdateBasicProfileContainer extends Component {
           </Text>
           <TextInput
             name='name'
+            autoCapitalize='words'
             onChangeText={(text) => this.setState({name: text})}
             style={Object.assign({}, styles.input, styles.inputText3)}
             placeholder='Your Name'
@@ -99,13 +90,6 @@ class UpdateBasicProfileContainer extends Component {
             placeholder='Your Email'
             value={this.state.email}>
           </TextInput>
-          <Text style={Object.assign(
-            {},
-            styles.textSizeSmall,
-            styles.textColorRed
-            )}>
-              {this.state.errorMessage}
-          </Text>
           <TouchableHighlight
             underlayColor='#cbcbcb'
             style={Object.assign({}, styles.touchable, styles.backOrange)}

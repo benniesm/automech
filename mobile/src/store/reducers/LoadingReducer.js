@@ -9,11 +9,13 @@ const loadingReducer = (state = defaultState, action) => {
     case 'ONLINE':
       return {
         loading: true
-      }
+      };
+      break;
     case 'OFFLINE':
       return {
         loading: false
-      }
+      };
+      break;
     default:
       return state;
   }

@@ -3,7 +3,8 @@ import {
   loadingOn
 } from './actions/LoadingAction';
 import { loginUser, logoutUser, profileUser } from './actions/AuthAction';
-import { viewData } from './actions/PageAction';
+import { setCoords, setMarkers } from './actions/MapAction';
+import { viewData, getServices } from './actions/PageAction';
 import { vendorOn, vendorOff } from './actions/VendorAction';
 
 const mapStateToProps = (state) => {
@@ -17,6 +18,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     deAuthenticateUser: () => {
       dispatch(logoutUser())
+    },
+    coordsSet: (data) => {
+      dispatch(setCoords(data))
+    },
+    markersSet: (data) => {
+      dispatch(setMarkers(data))
     },
     loadOn: () => {
       dispatch(loadingOn())
@@ -35,6 +42,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     viewInfo: (data) => {
       dispatch(viewData(data))
+    },
+    servicesGet: (data) => {
+      dispatch(getServices(data))
     }
   }
 }

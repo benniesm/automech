@@ -33,16 +33,18 @@ class Container extends Component {
 
   componentDidMount() {
     this.getProfile();
+    this.getServiceTypes();
   }
 
   getProfile = async() => {
     const profileData = this.props.state.auth.profile;
+    //console.log(profileData);
     if (profileData === null) {
       this.props.loadOff();
       this.props.navigation.navigate('Sign');
       return;
     }
-    console.log(this.props);
+    console.log(profileData);
 
     this.props.loadOn();
     let myProfile = await fetchApi.fetchNow(
@@ -58,6 +60,32 @@ class Container extends Component {
 
     if (myProfile.status !== 200) {
       this.props.navigation.navigate('Sign');
+    }
+  }
+
+  getServiceTypes = async() => {
+    const profileData = this.props.state.auth.profile;
+
+    if (profileData === null) {
+      this.props.loadOff();
+      this.props.navigation.navigate('Sign');
+      return;
+    }
+
+    this.props.loadOn();
+    let services = await fetchApi.fetchNow(
+      'get',
+      {
+        'url': 'service-types',
+        'data': '',
+        'token': profileData.apiToken
+      }
+    );
+    this.props.loadOff();
+
+    if (services.status === 200) {
+      this.props.servicesGet(services.data);
+      //console.log(this.props.state.page.list);
     }
   }
 

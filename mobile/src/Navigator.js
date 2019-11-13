@@ -7,7 +7,9 @@ import Index from './Index';
 import Login from './auth/Login';
 import CreateVendorProfile from './screens/profile/vendor/Create';
 import UpdateBasicProfile from './screens/profile/basic/Update';
+import UpdateVendorLocation from './screens/profile/vendor/UpdateLocation';
 import UpdateVendorProfile from './screens/profile/vendor/Update';
+import UploadVendorImage from './screens/profile/vendor/UploadImage';
 import ViewBasicProfile from './screens/profile/basic/View';
 import ViewVendorProfile from './screens/profile/vendor/View';
 
@@ -18,17 +20,23 @@ const MyDrawerNavigator = createDrawerNavigator({
   Profile: {
     screen: ViewBasicProfile,
   },
-  createVendorProfile: {
+  CreateVendorProfile: {
     screen: CreateVendorProfile,
   },
   Sign: {
     screen: Login,
   },
-  updateBasicProfile: {
+  UpdateBasicProfile: {
     screen: UpdateBasicProfile,
   },
-  updateVendorProfile: {
+  UpdateVendorLocation: {
+    screen: UpdateVendorLocation,
+  },
+  UpdateVendorProfile: {
     screen: UpdateVendorProfile,
+  },
+  UploadVendorImage: {
+    screen: UploadVendorImage,
   },
   Vendor: {
     screen: ViewVendorProfile,

@@ -2,7 +2,7 @@ import { loginUser, logoutUser, profileUser } from '../actions/AuthAction';
 
 const defaultState = {
   authenticated: false,
-  profile: null,
+  profile: {},
 };
 
 const authReducer = (state = defaultState, action) => {
@@ -11,17 +11,20 @@ const authReducer = (state = defaultState, action) => {
       return {
         authenticated: true,
         profile: action.profile
-      }
+      };
+      break;
     case 'LOGOUT':
       return {
         authenticated: false,
-        profile: null
-      }
+        profile: {}
+      };
+      break;
     case 'PROFILE':
       return {
         authenticated: true,
         profile: action.profile
-      }
+      };
+      break;
     default:
       return state;
   }

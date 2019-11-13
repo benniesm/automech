@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TouchableHighlight, View } from 'react-native';
+import { ImageBackground, Text, TouchableHighlight, View } from 'react-native';
 import styles from '../../Styles';
 
 class SignInButton extends Component {
@@ -9,18 +9,27 @@ class SignInButton extends Component {
 
   render() {
     return(
-      <TouchableHighlight
-        underlayColor='#cbcbcb'
-        style={styles.touchable}
-        onPress={() => this.props.goTo()}>
-        <Text style={Object.assign(
-          {},
-          styles.touchable,
-          styles.backViolet,
-          styles.buttonSmall)}>
-          Press Here To Sign In
-        </Text>
-      </TouchableHighlight>
+      <ImageBackground
+        source={require('../assets/images/spare-parts.jpg')}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          width: '100%',
+          height: '100%'
+      }}>
+        <TouchableHighlight
+          underlayColor='#cbcbcb'
+          style={styles.touchable}
+          onPress={() => this.props.goTo()}>
+          <Text style={Object.assign(
+            {},
+            styles.touchable,
+            styles.backRed,
+            styles.buttonSmall)}>
+             Press here to login or sign up!
+          </Text>
+        </TouchableHighlight>
+      </ImageBackground>
     )
   }
 }

@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Text, TextInput, TouchableHighlight, View } from 'react-native';
+import {
+  Alert,
+  Picker,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  View
+} from 'react-native';
 import { connect } from 'react-redux';
 import {
   mapStateToProps,
@@ -15,12 +22,18 @@ class UpdateVendorProfileContainer extends Component {
 
     const view = this.props.state.auth.profile.vendor;
     this.state = {
-      description: view.description
+      description: view.description,
+      serviceId: view.service.id
     }
+  }
+
+  componentDidMount() {
+  //  console.log(this.props.state.auth.profile.vendor.service.id);
   }
 
   sendUpdate = async() => {
     const profileData = this.props.state.auth.profile;
+    //console.log(this.state.serviceId)
 
     this.props.loadOn();
     let updateRequest = await fetchApi.fetchNow(
@@ -30,7 +43,8 @@ class UpdateVendorProfileContainer extends Component {
         'fetchId': profileData.vendor.id,
 				'body': {
 					description: this.state.description,
-          api_token: profileData.apiToken
+          service_id: this.state.serviceId,
+          api_token: profileData.api_token
 				}
 			}
 		);
@@ -40,22 +54,50 @@ class UpdateVendorProfileContainer extends Component {
       const updatedData = updateRequest.data;
       let newAuthData = profileData;
       newAuthData.vendor.description = updatedData.description;
+      newAuthData.vendor.service.service_type =
+        updatedData.service.service_type;
       this.props.saveProfile(newAuthData);
       //console.log(this.props.state.auth.profile);
 
-				this.props.navigation.navigate('Vendor');
+			this.props.navigation.navigate('Vendor');
 		} else {
-      this.setState({ errorMessage: 'Request Error, Please try again' });
+      Alert.alert('Request Error, Please try again');
     }
   }
 
   render() {
+    const serviceList = this.props.state.page.list.map(list => {
+      return list.id === this.state.service ?
+        null
+        :
+        <Picker.Item
+          key={list.id}
+          label={list.service_type}
+          value={list.id} />
+    });
+
     return (
       <>
         <Header
           drawer={this.props.navigation.openDrawer}
           page='Update Information' />
         <View style={styles.mainContent}>
+          <View style={{
+            height: 50,
+            width: '80%',
+            borderColor: 'black',
+            borderWidth: 1,
+            borderRadius: 7,
+            margin: 2
+          }}>
+          <Picker
+            selectedValue={this.state.serviceId}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({serviceId: itemValue})
+            }>
+            {serviceList}
+          </Picker>
+          </View>
           <TextInput
             multiline={true}
             name='description'
@@ -64,13 +106,6 @@ class UpdateVendorProfileContainer extends Component {
             placeholder='Enter personal text'
             value={this.state.description}>
           </TextInput>
-          <Text style={Object.assign(
-            {},
-            styles.textSizeSmall,
-            styles.textColorRed
-            )}>
-              {this.state.errorMessage}
-          </Text>
           <TouchableHighlight
             underlayColor='#cbcbcb'
             style={Object.assign({}, styles.touchable, styles.backOrange)}

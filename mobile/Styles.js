@@ -47,6 +47,12 @@ export default StyleSheet.create({
     display: 'flex',
     flexDirection: 'row'
   },
+  displayDataJoin: {
+    minWidth: '100%',
+    padding: 20,
+    display: 'flex',
+    flexDirection: 'row'
+  },
   editIcon: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -128,11 +134,29 @@ export default StyleSheet.create({
   mainContent: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
+    height: '92%',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1,
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject
+  },
+  mapForm: {
+    height: '18%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end'
+  },
+  mapView: {
+    height: '82%',
+    width: '100%'
+  },
+  mapView2: {
+    height: '92%',
+    width: '100%'
   },
   menuFooter: {
     justifyContent: 'center',
@@ -215,6 +239,9 @@ export default StyleSheet.create({
     marginRight: 5,
     padding: 15,
     borderRadius: 5
+  },
+  touchable2: {
+    padding: 15,
   },
   welcome: {
     alignItems: 'center',

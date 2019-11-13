@@ -31,4 +31,7 @@ Route::group(['middleware' => ['auth:api', 'cors']], function() {
   	Route::post('vendors/image/{vendor}', 'VendorController@update_image');
   	Route::put('vendors/{vendor}', 'VendorController@update');
   	Route::delete('vendors/{vendor}', 'VendorController@delete');
+
+    Route::get('service-types', 'ServiceTypeController@index');
+    Route::get('service-types/{service-type}', 'ServiceTypeController@show');
 });

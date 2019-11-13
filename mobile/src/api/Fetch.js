@@ -81,6 +81,7 @@ const putApi = async(params) => {
   let url = fetchUrl(params.url);
   let view = '/' + params.fetchId;
 
+  //console.log(url + view);
   const response = await fetch(url + view, {
     method: 'PUT',
     headers: {

@@ -122,35 +122,27 @@ class LoginContainer extends Component {
 		//console.log(signInRequest);
 		if (signInRequest.status === 200
 			|| signInRequest.status === 201) {
-				console.log(signInRequest.data.data)
+				//console.log(signInRequest.data.data)
 				const data = signInRequest.data.data;
-				const authData = {
-					'id': data.id.toString(),
-					'mobilePhone': data.mobile_phone,
-					'name': data.name,
-					'email': data.email,
-					'apiToken': data.api_token,
-					'emailVerified': data.email_verified_at,
-					'createdAt': data.created_at,
-					'vendor': data.vendor
-				};
+				//console.log(authData);
 
-				//console.log(this.props.state);
 				if (data.vendor !== null) {
 					this.props.vendOn();
 				}
-				this.props.authenticateUser(authData);
+				this.props.authenticateUser(data);
 				this.setState({
 					mobilePhone: '',
 					codeConfirm: '',
 					confirm: 'Send confirmation code'
 				});
+				//console.log(this.props.state.auth.profile);
 
 				this.props.navigation.navigate('Home');
 		} else {
 			this.setState({
 				errorMessage: 'Invalid login or registration credentials',
 			});
+			//console.log(signInRequest);
 		}
 	}
 
@@ -198,7 +190,7 @@ class LoginContainer extends Component {
 						style={Object.assign(
 							{},
 							styles.touchable,
-							styles.backOrange
+							styles.backGray
 							)}
 						onPress={() => this.sendConfirmation()}>
 						<Text style={styles.buttonSmall}>{this.state.confirm}</Text>
@@ -233,7 +225,7 @@ class LoginContainer extends Component {
 							style={Object.assign(
 								{},
 								styles.touchable,
-								styles.backViolet
+								styles.backOrange
 								)}
 							onPress={() => this.signIn()}>
 								<Text style={styles.buttonSmall}>SIGN IN</Text>

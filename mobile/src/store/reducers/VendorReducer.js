@@ -9,11 +9,13 @@ const vendorReducer = (state = defaultState, action) => {
     case 'VENDOR_USER':
       return {
         vendorUser: true
-      }
+      };
+      break;
     case 'NON_VENDOR_USER':
       return {
         vendorUser: false
-      }
+      };
+      break;
     default:
       return state;
   }

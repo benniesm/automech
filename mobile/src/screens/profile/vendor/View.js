@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, TouchableHighlight, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableHighlight, View } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import {
@@ -15,6 +16,9 @@ import SignInButton from '../../../components/SignInButton';
 class ViewVendorProfileContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      image: require('../../../assets/images/avatar-icon.jpg')
+    }
   }
 
   componentDidMount() {
@@ -22,16 +26,46 @@ class ViewVendorProfileContainer extends Component {
     //console.log(this.props.state.auth.profile.vendor);
   }
 
+  editImage = () => {
+    this.props.navigation.navigate('UploadVendorImage');
+  }
+
+  editLocation = () => {
+    this.props.navigation.navigate('UpdateVendorLocation');
+  }
+
+  editText = () => {
+    this.props.navigation.navigate('UpdateVendorProfile');
+  }
+
+  getMyCoordinates = () => {
+		Geolocation.getCurrentPosition(info => {
+      //console.log(info)
+      let currentCoords = info.coords;
+      currentCoords.latitudeDelta = 0.0100;
+      currentCoords.longitudeDelta = 0.0020;
+      this.props.coordsSet(currentCoords);
+
+      let marks = [{
+        latlng: {
+          latitude: info.coords.latitude,
+          longitude: info.coords.longitude
+        },
+        title: 'Your Current Location',
+        description: 'Drag this pin to your preferred work location'
+      }];
+      this.props.markersSet(marks);
+      console.log(this.props.state.map);
+    });
+  }
+
   goToCreate = () => {
+    this.getMyCoordinates();
     this.props.navigation.navigate('CreateVendorProfile');
   }
 
   goToSignIn = () => {
     this.props.navigation.navigate('Sign');
-  }
-
-  editText = () => {
-    this.props.navigation.navigate('updateVendorProfile');
   }
 
   render() {
@@ -42,16 +76,25 @@ class ViewVendorProfileContainer extends Component {
           <View style={Object.assign(
             {},
             styles.backRedPale,
-            styles.displayData
+            styles.displayDataIndividual
             )}>
-            <Text style={styles.textSizeMediumNormal}>
-                image
-            </Text>
+              <View style={{ width: '85%' }}>
+                <Image
+                  style={{width: 150, height: 150, borderRadius: 100}}
+                  source={this.state.image}
+                 />
+               </View>
+               <View style={styles.editIcon}>
+                   <Icon
+                   name='edit'
+                   size={22}
+                   onPress={() => this.editImage()} />
+               </View>
           </View>
           <View style={Object.assign(
             {},
             styles.backRedPale,
-            styles.displayDataIndividual
+            styles.displayDataJoin
             )}>
             <View style={{ width: '85%' }}>
               <Text style={styles.textSizeMediumNormal}>
@@ -78,8 +121,21 @@ class ViewVendorProfileContainer extends Component {
           <View style={Object.assign(
             {},
             styles.backRedPale,
-            styles.displayDataIndividual,
-            {borderBottomWidth: 2}
+            styles.displayDataJoin
+            )}>
+            <View style={{ width: '85%' }}>
+            <Text style={styles.textSizeMediumNormal}>
+                Service
+            </Text>
+            <Text style={styles.textSizeSmallNormal}>
+                {vendorData.service.service_type}
+            </Text>
+            </View>
+          </View>
+          <View style={Object.assign(
+            {},
+            styles.backRedPale,
+            styles.displayDataIndividual
             )}>
             <View style={{ width: '85%' }}>
             <Text style={styles.textSizeMediumNormal}>
@@ -114,7 +170,7 @@ class ViewVendorProfileContainer extends Component {
               {
                 this.props.state.auth.profile.vendor === null ?
                   <View>
-                    <Text>Update your profile to become a vendor</Text>
+                    <Text>Confirm your work location to become a vendor</Text>
                     <TouchableHighlight
                       underlayColor='#cbcbcb'
                       style={Object.assign(

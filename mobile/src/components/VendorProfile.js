@@ -6,7 +6,7 @@ import {
   mapDispatchToProps
 } from '../store/StateDispatch';
 import styles from '../../Styles';
-
+/*
 class VendorProfile extends Component {
   constructor(props) {
     super(props);
@@ -80,3 +80,4 @@ class VendorProfile extends Component {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(VendorProfile);
+*/

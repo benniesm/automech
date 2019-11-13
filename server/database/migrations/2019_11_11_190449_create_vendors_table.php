@@ -16,7 +16,8 @@ class CreateVendorsTable extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('user_id')->unique()->unsigned();
+            $table->bigInteger('service_id')->unsigned();
             $table->string('image')->nullable();
             $table->string('latitude');
             $table->string('longitude');
@@ -27,6 +28,11 @@ class CreateVendorsTable extends Migration
 						$table->foreign('user_id')
 						    ->references('id')
 						    ->on('users')
+						    ->onDelete('cascade');
+
+						$table->foreign('service_id')
+						    ->references('id')
+						    ->on('service_types')
 						    ->onDelete('cascade');
         });
     }

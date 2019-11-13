@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use GuzzleHttp\Client;
 use App\User;
+use App\ServiceType;
+use App\Vendor;
 
 class LoginController extends Controller
 {
@@ -51,8 +53,13 @@ class LoginController extends Controller
 				    $user = $this->guard()->user();
 				    $user->generateToken();
 
+            $vendor = Vendor::where('user_id', $user->id)->first();
+            $service_type = ServiceType::where('id', $vendor->service_id)->first();
+            $user['vendor'] = $vendor;
+            $user->vendor['service'] = $service_type;
+
 				    return response()->json([
-				        'data' => User::with('vendor')->find($user->id),
+				        'data' => $user,
 				    ]);
 				}
 

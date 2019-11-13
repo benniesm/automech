@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Vendor;
+use App\ServiceType;
 
 class VendorController extends Controller
 {
     public function index()
     {
-      	return Vendor::with('user')->get();
+      	return Vendor::all();
     }
 
     public function show(Vendor $vendor)
     {
-        return Vendor::with('user')->find($vendor);
+        $service_type = ServiceType::where('id', $vendor->service_id)->first();
+        $vendor['service'] = $service_type;
+        return $vendor;
     }
 
     public function store(Request $request)
@@ -38,6 +41,8 @@ class VendorController extends Controller
         }
 
         $vendor = Vendor::create($data);
+        $service_type = ServiceType::where('id', $vendor->service_id)->first();
+        $vendor['service'] = $service_type;
         return response()->json($vendor, 201);
     }
 
@@ -45,9 +50,10 @@ class VendorController extends Controller
     {
         $vendor->update($request->all());
 
-        $data = Vendor::with('user')->find($vendor['id']);
+        $service_type = ServiceType::where('id', $vendor->service_id)->first();
+        $vendor['service'] = $service_type;
 
-        return response()->json($data, 200);
+        return response()->json($vendor, 200);
     }
 
     public function update_image(Request $request, Vendor $vendor)
@@ -73,7 +79,9 @@ class VendorController extends Controller
   			$data->image = $image_file;
   			$data->save();
 
-  			$data = Vendor::with('user')->find($request['id']);
+  			$data =  Vendor::with('service_type')->find($vendor);
+        $service_type = ServiceType::where('id', $data->service_id)->first();
+        $data['service'] = $service_type;
 
 		    return response()->json($data, 200);
         } else {

@@ -31,7 +31,7 @@ class ViewBasicProfileContainer extends Component {
   }
 
   showViewUpdate = () => {
-    this.props.navigation.navigate('updateBasicProfile');
+    this.props.navigation.navigate('UpdateBasicProfile');
   }
 
   signOut = () => {
@@ -77,7 +77,7 @@ class ViewBasicProfileContainer extends Component {
                 Mobile
             </Text>
             <Text style={styles.textSizeSmallNormal}>
-                {profileData.mobilePhone}
+                {profileData.mobile_phone}
             </Text>
           </View>
             <View style={Object.assign(
