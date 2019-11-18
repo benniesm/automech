@@ -11,6 +11,9 @@ class SignInButton extends Component {
     return(
       <ImageBackground
         source={require('../assets/images/spare-parts.jpg')}
+        imageStyle={{
+          opacity: 1
+        }}
         style={{
           display: 'flex',
           justifyContent: 'center',

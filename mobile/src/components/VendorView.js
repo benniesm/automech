@@ -16,10 +16,10 @@ import Header from './Header';
 
 class VendorViewContainer extends Component {
   render() {
-    const vendorData = this.props.state.vendor.selected;
-    const distance = () => {
-      return 'distance'
-    }
+    const venProps = this.props.state.vendor;
+    const vendorData = venProps.selected;
+    const venDist = venProps.distance;
+
     const Vendor = () => {
       return(
         <View>
@@ -40,9 +40,15 @@ class VendorViewContainer extends Component {
                  />
                </View>
                <View style={{ width: '33%' }}>
-                  <Text>
-                    {distance()} Km
+                  <Text style={styles.textSizeMedium}>
+                    {
+                      venDist >= 1 ?
+                        venDist.toFixed(2) + 'Km'
+                        :
+                        Math.round(venDist * 1000) + 'm'
+                    }
                   </Text>
+                  <Text style={styles.textSizeMediumNormal}>from here</Text>
                </View>
           </View>
           <View style={Object.assign(

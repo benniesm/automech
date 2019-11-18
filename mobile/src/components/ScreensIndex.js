@@ -41,12 +41,12 @@ class ScreensIndexContainer extends Component {
     );
     this.props.loadOff();
 
-    console.log(serviceVendors.data);
+    //console.log(serviceVendors.data);
     if (serviceVendors.status === 200) {
       this.props.markVendorsSet(serviceVendors.data);
       this.props.pageToMap();
       this.props.nav('Services');
-      console.log(this.props.state.map.markVendors);
+      //console.log(this.props.state.map.markVendors);
     }
   }
 

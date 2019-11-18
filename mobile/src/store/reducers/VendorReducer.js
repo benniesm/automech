@@ -1,8 +1,14 @@
-import { vendorOn, vendorOff, selectVendor } from '../actions/VendorAction';
+import {
+  vendorOn,
+  vendorOff,
+  selectVendor,
+  calcVendorDist
+} from '../actions/VendorAction';
 
 const defaultState = {
   vendorUser: false,
-  selected: {}
+  selected: {},
+  distance: 0
 };
 
 const vendorReducer = (state = defaultState, action) => {
@@ -10,17 +16,26 @@ const vendorReducer = (state = defaultState, action) => {
     case 'VENDOR_USER':
       return {
         vendorUser: true,
-        selected: state.selected
+        selected: state.selected,
+        distance: state.distance
       }
     case 'NON_VENDOR_USER':
       return {
         vendorUser: false,
-        selected: state.selected
+        selected: state.selected,
+        distance: state.distance
       }
     case 'SELECT_VENDOR':
       return {
         selected: action.selected,
-        vendorUser: state.vendorUser
+        vendorUser: state.vendorUser,
+        distance: state.distance
+      }
+    case 'VENDOR_DISTANCE':
+      return {
+        distance: action.distance,
+        vendorUser: state.vendorUser,
+        selected: state.selected
       }
     default:
       return state;

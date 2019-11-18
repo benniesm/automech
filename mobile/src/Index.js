@@ -119,7 +119,7 @@ class Container extends Component {
           <>
             <Header
               drawer={this.props.navigation.openDrawer}
-              page='Welcome!' />
+              page='AUTOMECH' />
             <View style={styles.window}>
               <ScreensIndex nav={this.props.navigation.navigate} />
             </View>

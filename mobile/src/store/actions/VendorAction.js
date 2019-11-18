@@ -17,4 +17,11 @@ const selectVendor = (data) => {
   }
 }
 
-export { vendorOn, vendorOff, selectVendor };
+const calcVendorDist = (data) => {
+  return {
+    type: 'VENDOR_DISTANCE',
+    distance: data
+  }
+}
+
+export { vendorOn, vendorOff, selectVendor, calcVendorDist };

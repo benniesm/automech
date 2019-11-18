@@ -10,7 +10,12 @@ import {
   setPageToMap,
   setPageToView
 } from './actions/PageAction';
-import { vendorOn, vendorOff, selectVendor } from './actions/VendorAction';
+import {
+  vendorOn,
+  vendorOff,
+  selectVendor,
+  calcVendorDist
+} from './actions/VendorAction';
 
 const mapStateToProps = (state) => {
   return { state: state }
@@ -35,6 +40,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     vendorSelect: (data) => {
       dispatch(selectVendor(data))
+    },
+    vendorDistCalc: (data) => {
+      dispatch(calcVendorDist(data))
     },
     loadOn: () => {
       dispatch(loadingOn())
