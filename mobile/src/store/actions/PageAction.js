@@ -12,4 +12,16 @@ const getServices = (data) => {
   }
 }
 
-export { viewData, getServices };
+const setPageToMap = () => {
+  return {
+    type: 'PAGE_MAP'
+  }
+}
+
+const setPageToView = () => {
+  return {
+    type: 'PAGE_VIEW'
+  }
+}
+
+export { viewData, getServices, setPageToMap, setPageToView };

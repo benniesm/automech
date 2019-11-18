@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { Image, ScrollView, Text, TouchableHighlight, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  View
+} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -23,7 +29,7 @@ class ViewVendorProfileContainer extends Component {
 
   componentDidMount() {
     //this.getVendor();
-    //console.log(this.props.state.auth.profile.vendor);
+    //console.log(this.props.state.auth.profile);
   }
 
   editImage = () => {
@@ -31,6 +37,7 @@ class ViewVendorProfileContainer extends Component {
   }
 
   editLocation = () => {
+    console.log(this.props.state.map.markMe);
     this.props.navigation.navigate('UpdateVendorLocation');
   }
 
@@ -38,29 +45,7 @@ class ViewVendorProfileContainer extends Component {
     this.props.navigation.navigate('UpdateVendorProfile');
   }
 
-  getMyCoordinates = () => {
-		Geolocation.getCurrentPosition(info => {
-      //console.log(info)
-      let currentCoords = info.coords;
-      currentCoords.latitudeDelta = 0.0100;
-      currentCoords.longitudeDelta = 0.0020;
-      this.props.coordsSet(currentCoords);
-
-      let marks = [{
-        latlng: {
-          latitude: info.coords.latitude,
-          longitude: info.coords.longitude
-        },
-        title: 'Your Current Location',
-        description: 'Drag this pin to your preferred work location'
-      }];
-      this.props.markersSet(marks);
-      console.log(this.props.state.map);
-    });
-  }
-
   goToCreate = () => {
-    this.getMyCoordinates();
     this.props.navigation.navigate('CreateVendorProfile');
   }
 
@@ -185,11 +170,7 @@ class ViewVendorProfileContainer extends Component {
                     </TouchableHighlight>
                   </View>
                   :
-                  <ScrollView style={Object.assign(
-                    {},
-                    styles.view,
-                    styles.backRedPale
-                    )}>
+                  <ScrollView style={styles.backRedPale}>
                     <Vendor />
                   </ScrollView>
               }

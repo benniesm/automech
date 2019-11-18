@@ -22,7 +22,7 @@ import ShowMapView from '../../../components/MapView';
 class UpdateVendorLocationContainer extends Component {
   updateLocation = async() => {
     const profileData = this.props.state.auth.profile;
-    const vendorCoords = this.props.state.map.marks[0].latlng;
+    const vendorCoords = this.props.state.map.markMe.latlng;
     console.log(vendorCoords);
 
     this.props.loadOn();
@@ -43,14 +43,10 @@ class UpdateVendorLocationContainer extends Component {
 		if (updateRequest.status === 200) {
       const updatedData = updateRequest.data;
       profileData['vendor'] = updatedData;
-      //console.log({'cd':createdData});
-      //console.log({'old':profileData});
       this.props.saveProfile(profileData);
-      //console.log({'new':this.props.state.auth.profile});
 
 			this.props.navigation.navigate('Vendor');
 		} else {
-      //Alert.alert(createRequest.data);
       Alert.alert('Request Error, Please try again');
     }
   }
@@ -60,10 +56,10 @@ class UpdateVendorLocationContainer extends Component {
       <>
         <Header
           drawer={this.props.navigation.openDrawer}
-          page='New Vendor Profile' />
+          page='Change Location' />
         <View style={styles.mainContent}>
           <View style={styles.mapView2}>
-            <ShowMapView />
+            <ShowMapView parent='me' />
           </View>
             <View>
               <TouchableHighlight

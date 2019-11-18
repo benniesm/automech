@@ -5,11 +5,18 @@ const setCoords = (data) => {
   }
 }
 
-const setMarkers = (data) => {
+const setMarkMe = (data) => {
   return {
-    type: 'MARKERS',
-    marks: data
+    type: 'MARK_ME',
+    markMe: data
   }
 }
 
-export { setCoords, setMarkers };
+const setMarkVendors = (data) => {
+  return {
+    type: 'MARK_VENDORS',
+    markVendors: data
+  }
+}
+
+export { setCoords, setMarkMe, setMarkVendors };

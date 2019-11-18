@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth:api', 'cors']], function() {
 
     Route::get('vendors', 'VendorController@index');
   	Route::get('vendors/{vendor}', 'VendorController@show');
+  	Route::get('vendors/services/{service}', 'VendorController@show_services');
   	Route::post('vendors', 'VendorController@store');
   	Route::post('vendors/image/{vendor}', 'VendorController@update_image');
   	Route::put('vendors/{vendor}', 'VendorController@update');

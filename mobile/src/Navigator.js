@@ -12,6 +12,7 @@ import UpdateVendorProfile from './screens/profile/vendor/Update';
 import UploadVendorImage from './screens/profile/vendor/UploadImage';
 import ViewBasicProfile from './screens/profile/basic/View';
 import ViewVendorProfile from './screens/profile/vendor/View';
+import Services from './screens/services/Services';
 
 const MyDrawerNavigator = createDrawerNavigator({
   Home: {
@@ -40,6 +41,9 @@ const MyDrawerNavigator = createDrawerNavigator({
   },
   Vendor: {
     screen: ViewVendorProfile,
+  },
+  Services: {
+    screen: Services,
   },
 }, {
   contentComponent: SideMenu,

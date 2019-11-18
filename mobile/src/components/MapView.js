@@ -29,8 +29,8 @@ class MapViewContainer extends Component {
       longitudeDelta: oldCoordinates.longitudeDelta
     }
 
-    console.log(this.props.state.map.marks[0].latlng);
-    let newMark = [
+    //console.log(this.props.state.map.markMe);
+    let newMark =
       {
         latlng: {
           latitude: coordinates.latitude,
@@ -38,39 +38,62 @@ class MapViewContainer extends Component {
         },
         title: 'Selected Location',
         description: 'This location will be set as your work place'
-      }
-    ];
+      };
 
     this.props.coordsSet(newCoordinates);
-    this.props.markersSet(newMark);
-    console.log(this.props.state.map.marks[0].latlng);
+    this.props.markMeSet(newMark);
+    console.log(this.props.state.map.markMe);
+  }
+
+  viewVendor = (ven) => {
+    this.props.vendorSelect(ven);
+    this.props.pageToView();
   }
 
   render() {
     const coordsNow = this.props.state.map;
+    const markMe = coordsNow.markMe;
+    const markVendors = coordsNow.markVendors;
+    /*
+    return this.props.state.map.markVendors.map(m => {
+      <Text>{m.latitude}</Text>
+    })
+    */
     return(
       <MapView
         style={styles.map}
         region={ coordsNow.coords }
       >
-        {this.props.state.map.marks.map(marker =>
-          this.props.state.map.marks.length > 1 ?
-          <Marker
-            key={marker.latlng}
-            coordinate={marker.latlng}
-            title={marker.title}
-            description={marker.description}
-          />
-          :
-          <Marker
-            draggable
-            onDragEnd={(e) => this.changeCoordinates(e.nativeEvent.coordinate)}
-            key={marker.latlng}
-            coordinate={marker.latlng}
-            title={marker.title}
-            description={marker.description}
-          />
-      )}
+        {
+          this.props.parent === 'me' ?
+            <Marker
+              draggable
+              onDragEnd={
+                (e) => this.changeCoordinates(e.nativeEvent.coordinate)
+              }
+              coordinate={markMe.latlng}
+              title={markMe.title}
+              description={markMe.description}
+            />
+            :
+            this.props.state.map.markVendors.map(marker => {
+              return (
+                <Marker
+                  key={marker.id}
+                  coordinate={{
+                    latitude: Number(marker.latitude),
+                    longitude: Number(marker.longitude)
+                  }}
+                  title={marker.user.name.toString()}
+                  description={marker.description}
+                  onPress={() => this.viewVendor(marker)}
+                />
+              )
+              {
+                console.log('marker.user')
+              }
+            })
+        }
       </MapView>
     )
   }

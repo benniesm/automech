@@ -1,4 +1,4 @@
-import { setMarkers, setCoords } from '../actions/MapAction';
+import { setMarkMe, setMarkVendors, setCoords } from '../actions/MapAction';
 
 const defaultState = {
   coords: {
@@ -11,13 +11,12 @@ const defaultState = {
     heading: 0,
     speed: 0
   },
-  marks: [
-    {
+  markMe: {
       latlng: { latitude: 6.6211, longitude: 3.3609 },
       title: 'Pinned Location',
       description: 'Currently Selected Location'
-    }
-  ],
+  },
+  markVendors: []
 };
 
 const mapReducer = (state = defaultState, action) => {
@@ -25,13 +24,21 @@ const mapReducer = (state = defaultState, action) => {
     case 'COORDINATES':
       return {
         coords: action.coords,
-        marks: state.marks
-      };
-    case 'MARKERS':
+        markMe: state.markMe,
+        markVendors: state.markVendors
+      }
+    case 'MARK_ME':
       return {
+        markMe: action.markMe,
         coords: state.coords,
-        marks: action.marks
-      };
+        markVendors: state.markVendors
+      }
+    case 'MARK_VENDORS':
+      return {
+        markVendors: action.markVendors,
+        coords: state.coords,
+        markMe: state.markMe
+      }
     default:
       return state;
   }

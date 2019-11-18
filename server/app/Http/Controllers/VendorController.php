@@ -20,6 +20,16 @@ class VendorController extends Controller
         return $vendor;
     }
 
+    public function show_services(Request $request, Vendor $vendor)
+    {
+        $service_vendors = Vendor::where('service_id', $request->service_id)
+          ->with(['user' => function($q){
+            $q->select('id', 'name', 'mobile_phone');
+          }])
+          ->get();
+        return response()->json($service_vendors, 200);
+    }
+
     public function store(Request $request)
     {
         $data = $request->all();
@@ -56,15 +66,15 @@ class VendorController extends Controller
         return response()->json($vendor, 200);
     }
 
-    public function update_image(Request $request, Vendor $vendor)
+    public function update_image(Request $request,  Vendor $vendor)
     {
         if (!$request->hasFile('image')) {
-        	return response()->json($request, 400);
+        	return response()->json($request, 406);
         }
 
         $file = $request->file('image');
         if (!$file->isValid()) {
-        	return response()->json($request, 400);
+        	return response()->json($request, 407);
         }
 
         $path = public_path().'/uploads/profiles/images/';

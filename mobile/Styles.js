@@ -88,6 +88,13 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   */
+  iconIndex: {
+    width: 70,
+    height: 70,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'lightgray'
+  },
   imageLoading: {
     height: 120,
     width: 155,
@@ -97,6 +104,11 @@ export default StyleSheet.create({
     height: '100%',
     width: '100%',
     opacity: 0.9,
+  },
+  indexListItem: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: 10
   },
   input: {
   borderRadius: 5,
@@ -187,8 +199,6 @@ export default StyleSheet.create({
     paddingTop: 10
   },
   tableIndex: {
-    height: '50%',
-    width: '90%',
   },
   text: {
   },
@@ -253,7 +263,7 @@ export default StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
-    width: '100%',
+    height: '92%',
+    width: '100%'
   },
 });

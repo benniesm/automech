@@ -56,7 +56,7 @@ class UpdateBasicProfileContainer extends Component {
       <>
         <Header
           drawer={this.props.navigation.openDrawer}
-          page='Update Information' />
+          page='Change Information' />
         <View style={styles.mainContent}>
           <Text style={Object.assign(
             {},

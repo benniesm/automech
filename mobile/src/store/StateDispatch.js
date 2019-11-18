@@ -3,9 +3,14 @@ import {
   loadingOn
 } from './actions/LoadingAction';
 import { loginUser, logoutUser, profileUser } from './actions/AuthAction';
-import { setCoords, setMarkers } from './actions/MapAction';
-import { viewData, getServices } from './actions/PageAction';
-import { vendorOn, vendorOff } from './actions/VendorAction';
+import { setCoords, setMarkMe, setMarkVendors } from './actions/MapAction';
+import {
+  viewData,
+  getServices,
+  setPageToMap,
+  setPageToView
+} from './actions/PageAction';
+import { vendorOn, vendorOff, selectVendor } from './actions/VendorAction';
 
 const mapStateToProps = (state) => {
   return { state: state }
@@ -22,8 +27,14 @@ const mapDispatchToProps = (dispatch) => {
     coordsSet: (data) => {
       dispatch(setCoords(data))
     },
-    markersSet: (data) => {
-      dispatch(setMarkers(data))
+    markMeSet: (data) => {
+      dispatch(setMarkMe(data))
+    },
+    markVendorsSet: (data) => {
+      dispatch(setMarkVendors(data))
+    },
+    vendorSelect: (data) => {
+      dispatch(selectVendor(data))
     },
     loadOn: () => {
       dispatch(loadingOn())
@@ -45,6 +56,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     servicesGet: (data) => {
       dispatch(getServices(data))
+    },
+    pageToMap: () => {
+      dispatch(setPageToMap())
+    },
+    pageToView: () => {
+      dispatch(setPageToView())
     }
   }
 }

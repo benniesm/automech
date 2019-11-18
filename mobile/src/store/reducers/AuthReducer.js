@@ -11,20 +11,17 @@ const authReducer = (state = defaultState, action) => {
       return {
         authenticated: true,
         profile: action.profile
-      };
-      break;
+      }
     case 'LOGOUT':
       return {
         authenticated: false,
         profile: {}
-      };
-      break;
+      }
     case 'PROFILE':
       return {
         authenticated: true,
         profile: action.profile
-      };
-      break;
+      }
     default:
       return state;
   }

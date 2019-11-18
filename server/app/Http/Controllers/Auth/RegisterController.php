@@ -87,9 +87,11 @@ class RegisterController extends Controller
 				$user->generateToken();
 
         $vendor = Vendor::where('user_id', $user->id)->first();
-        $service_type = ServiceType::where('id', $vendor->service_id)->first();
         $user['vendor'] = $vendor;
-        $user->vendor['service'] = $service_type;
+        if ($vendor !== null) {
+          $service_type = ServiceType::where('id', $vendor->service_id)->first();
+          $user->vendor['service'] = $service_type;
+        }
 
 				return response()->json(
           ['data' => $user],

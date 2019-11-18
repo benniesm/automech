@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, TouchableHighlight, Text, View } from 'react-native';
+import { Alert, Image, TouchableHighlight, Text, View } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import {
@@ -11,10 +11,15 @@ import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 
 class UploadVendorImageContainer extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const vendorProfile = this.props.state.auth.profile.vendor;
     this.state = {
-      image: require('../../../assets/images/avatar-icon.jpg') //this.props.state.auth.profile.image
+      image: vendorProfile.image === null ?
+        require('../../../assets/images/avatar-icon.jpg')
+        :
+        vendorProfile.image,
+      uploadImage: ''
     }
   }
 
@@ -28,7 +33,7 @@ class UploadVendorImageContainer extends Component {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
+      console.log(response.uri);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -38,13 +43,46 @@ class UploadVendorImageContainer extends Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = { uri: response.uri };
+        const uploadSource = response.uri;
 
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        this.setState({ image: source });
+        this.setState({ image: source, uploadImage: uploadSource });
       }
     });
+  }
+
+  uploadImage = async() => {
+    const profileData = this.props.state.auth.profile;
+
+    const formData = new FormData();
+    formData.append('api_token', profileData.api_token);
+    formData.append('image', this.state.uploadImage);
+    formData.append('oldImage', this.props.state.auth.profile.vendor.image);
+
+    this.props.loadOn();
+    let uploadRequest = await fetchApi.fetchNow(
+			'post',
+			{
+				'url': 'vendors/image',
+				'fetchId': profileData.vendor.id,
+        'content': 'multipart/form-data',
+				'body': formData
+			}
+		);
+    this.props.loadOff();
+
+		if (uploadRequest.status === 200) {
+      const updatedData = uploadRequest.data;
+      profileData['vendor'] = updatedData;
+      this.props.saveProfile(profileData);
+
+			this.props.navigation.navigate('Vendor');
+		} else {
+      Alert.alert('Request Error, Please try again');
+      console.log({ 's': uploadRequest.status, 'd': uploadRequest.data});
+    }
   }
 
   render() {
@@ -52,7 +90,7 @@ class UploadVendorImageContainer extends Component {
       <>
         <Header
           drawer={this.props.navigation.openDrawer}
-          page='New Vendor Profile' />
+          page='Change Image' />
         <View style={styles.mainContent}>
           <Image
             style={{width: 170, height: 170}}
@@ -67,7 +105,7 @@ class UploadVendorImageContainer extends Component {
          <TouchableHighlight
            underlayColor='#cbcbcb'
            style={Object.assign({}, styles.touchable, styles.backOrange)}
-           onPress={() => this.updateImage()}>
+           onPress={() => this.uploadImage()}>
            <Text style={styles.buttonSmall}>UPLOAD NEW PHOTO</Text>
          </TouchableHighlight>
         </View>

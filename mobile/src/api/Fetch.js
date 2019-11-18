@@ -20,7 +20,7 @@ const timeout = async(ms, promise) => {
 
 const getApi = async(params) => {
   let url = fetchUrl(params.url);
-  let view = "";
+  let view = '';
 
   if (params.hasOwnProperty('fetchId')) {
     view = '/' + params.fetchId;
@@ -29,15 +29,16 @@ const getApi = async(params) => {
   const token = params.token;
   //console.log(token);
 
-  //console.log(url + view + '?' + params.data + '&api_token=' + token);
-  const response = await fetch(url + view + '?' + params.data + '&api_token=' + token, {
-    headers: {
-  		'Accept': 'application/json',
-  		'Content-Type': 'application/json',
-    }
-  }).catch(err => {
-    throw {'status': 0, 'data': err};
-  });
+  console.log(url + view + '?' + params.data + '&api_token=' + token);
+  const response =
+    await fetch(url + view + '?' + params.data + '&api_token=' + token, {
+      headers: {
+    		'Accept': 'application/json',
+    		'Content-Type': 'application/json',
+      }
+    }).catch(err => {
+      throw {'status': 0, 'data': err};
+    });
   const jsonStatus = await response.status;
   const jsonData = await response.json();
   if (jsonStatus >= 300){
@@ -48,20 +49,26 @@ const getApi = async(params) => {
 
 const postApi = async(params) => {
   let url = fetchUrl(params.url);
-  let view = "";
+  let view = '';
+  let content = 'application/json';
 
   if (params.hasOwnProperty('fetchId')) {
     view = '/' + params.fetchId;
   }
+
+  if (params.hasOwnProperty('content')) {
+    content = params.content;
+  }
   //console.log(token);
 
   //console.log(JSON.stringify(params.body));
-  //console.log(url + view + '?&api_token=' + token);
+  //console.log(url + view);
   const response = await fetch(url + view, {
     method: 'POST',
     headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
+      'content-type': content
     },
     body: JSON.stringify(params.body)
   }).catch(err => {

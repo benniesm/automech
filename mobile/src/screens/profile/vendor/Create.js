@@ -88,7 +88,7 @@ class CreateVendorProfileContainer extends Component {
           page='New Vendor Profile' />
         <View style={styles.mainContent}>
           <View style={styles.mapView}>
-            <ShowMapView />
+            <ShowMapView parent='me' />
           </View>
           <View style={Object.assign(
             {},

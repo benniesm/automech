@@ -135,14 +135,14 @@ class LoginContainer extends Component {
 					codeConfirm: '',
 					confirm: 'Send confirmation code'
 				});
-				//console.log(this.props.state.auth.profile);
+				console.log(this.props.state.auth.profile);
 
 				this.props.navigation.navigate('Home');
 		} else {
 			this.setState({
 				errorMessage: 'Invalid login or registration credentials',
 			});
-			//console.log(signInRequest);
+		//	console.log(signInRequest);
 		}
 	}
 

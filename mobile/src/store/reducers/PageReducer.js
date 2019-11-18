@@ -2,7 +2,8 @@ import { viewData, getServices } from '../actions/PageAction';
 
 const defaultState = {
   view: null,
-  list: null
+  list: null,
+  pageTo: 'map'
 };
 
 const pageReducer = (state = defaultState, action) => {
@@ -10,15 +11,27 @@ const pageReducer = (state = defaultState, action) => {
     case 'UPDATE':
       return {
         view: action.view,
-        list: state.list
+        list: state.list,
+        pageTo: state.pageTo
       };
-      break;
     case 'SERVICE_TYPES':
       return {
+        list: action.list,
         view: state.view,
-        list: action.list
+        pageTo: state.pageTo
       }
-      break;
+    case 'PAGE_MAP':
+      return {
+        pageTo: 'map',
+        list: state.list,
+        view: state.view
+      }
+    case 'PAGE_VIEW':
+      return {
+        pageTo: 'view',
+        list: state.list,
+        view: state.view
+      }
     default:
       return state;
   }

@@ -4,17 +4,10 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-  Cols
-} from 'react-native-table-component';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import Geolocation from '@react-native-community/geolocation';
 import { connect } from 'react-redux';
 import {
   mapStateToProps,
@@ -25,6 +18,7 @@ import styles from '../Styles';
 import Header from './components/Header';
 import Loading from './components/Loading';
 import SignInButton from './components/SignInButton';
+import ScreensIndex from './components/ScreensIndex';
 
 class Container extends Component {
 	constructor(props) {
@@ -34,6 +28,29 @@ class Container extends Component {
   componentDidMount() {
     this.getProfile();
     this.getServiceTypes();
+    this.getMyPosition();
+  }
+
+  getMyPosition = () => {
+		Geolocation.watchPosition(info => {
+      console.log(info.coords)
+
+      let currentCoords = info.coords;
+      currentCoords.latitudeDelta = 0.0100;
+      currentCoords.longitudeDelta = 0.0020;
+      this.props.coordsSet(currentCoords);
+
+      let marks = {
+        latlng: {
+          latitude: info.coords.latitude,
+          longitude: info.coords.longitude
+        },
+        title: 'Your Current Location',
+        description: 'AutoMech keeps you connected!'
+      };
+      this.props.markMeSet(marks);
+      console.log(this.props.state.map);
+    });
   }
 
   getProfile = async() => {
@@ -53,7 +70,7 @@ class Container extends Component {
         'url': 'profile',
         'fetchId': profileData.id,
         'data': '',
-        'token': profileData.apiToken
+        'token': profileData.api_token
       }
     );
     this.props.loadOff();
@@ -78,14 +95,14 @@ class Container extends Component {
       {
         'url': 'service-types',
         'data': '',
-        'token': profileData.apiToken
+        'token': profileData.api_token
       }
     );
     this.props.loadOff();
 
     if (services.status === 200) {
       this.props.servicesGet(services.data);
-      //console.log(this.props.state.page.list);
+      console.log(this.props.state.page.list);
     }
   }
 
@@ -94,12 +111,6 @@ class Container extends Component {
   }
 
   render() {
-    const screens = [
-      ['Auto Mech', 'Auto Parts', 'Auto Scan'],
-      ['Electronics', 'Body Works', 'Paint'],
-      ['Tyres', 'Fuel Station', 'Towing Van'],
-    ];
-
     return this.props.state.load.loading === true ?
       <View style={styles.loading}><Loading /></View>
       :
@@ -109,10 +120,8 @@ class Container extends Component {
             <Header
               drawer={this.props.navigation.openDrawer}
               page='Welcome!' />
-            <View style={Object.assign({}, styles.window, styles.bg2)}>
-              <Table style={styles.tableIndex}>
-                <Rows data={screens} />
-              </Table>
+            <View style={styles.window}>
+              <ScreensIndex nav={this.props.navigation.navigate} />
             </View>
           </>
         )

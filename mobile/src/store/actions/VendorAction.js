@@ -10,4 +10,11 @@ const vendorOff = () => {
   }
 }
 
-export { vendorOn, vendorOff };
+const selectVendor = (data) => {
+  return {
+    type: 'SELECT_VENDOR',
+    selected: data
+  }
+}
+
+export { vendorOn, vendorOff, selectVendor };
