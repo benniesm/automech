@@ -15,6 +15,7 @@ import {
 import fetchApi from '../../../api/Fetch';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
+import Loading from '../../../components/Loading';
 
 class UpdateVendorProfileContainer extends Component {
   constructor(props) {
@@ -76,45 +77,49 @@ class UpdateVendorProfileContainer extends Component {
           value={list.id} />
     });
 
-    return (
-      <>
-        <Header
-          drawer={this.props.navigation.openDrawer}
-          page='Update Information' />
-        <View style={styles.mainContent}>
-          <View style={{
-            height: 50,
-            width: '80%',
-            borderColor: 'black',
-            borderWidth: 1,
-            borderRadius: 7,
-            margin: 2
-          }}>
-          <Picker
-            selectedValue={this.state.serviceId}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({serviceId: itemValue})
-            }>
-            {serviceList}
-          </Picker>
+    return this.props.state.load.loading === true ?
+      <View style={styles.loading}><Loading /></View>
+      :
+      (
+        <>
+          <Header
+            drawer={this.props.navigation.openDrawer}
+            page='Edit My Details'
+            nav={this.props.navigation} />
+          <View style={styles.mainContent}>
+            <View style={{
+              height: 50,
+              width: '80%',
+              borderColor: 'black',
+              borderWidth: 1,
+              borderRadius: 7,
+              margin: 2
+            }}>
+            <Picker
+              selectedValue={this.state.serviceId}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({serviceId: itemValue})
+              }>
+              {serviceList}
+            </Picker>
+            </View>
+            <TextInput
+              multiline={true}
+              name='description'
+              onChangeText={(text) => this.setState({description: text})}
+              style={Object.assign({}, styles.input, styles.inputTextArea)}
+              placeholder='Enter personal text'
+              value={this.state.description}>
+            </TextInput>
+            <TouchableHighlight
+              underlayColor='#cbcbcb'
+              style={Object.assign({}, styles.touchable, styles.backOrange)}
+              onPress={() => this.sendUpdate()}>
+              <Text style={styles.buttonSmall}>Submit</Text>
+            </TouchableHighlight>
           </View>
-          <TextInput
-            multiline={true}
-            name='description'
-            onChangeText={(text) => this.setState({description: text})}
-            style={Object.assign({}, styles.input, styles.inputTextArea)}
-            placeholder='Enter personal text'
-            value={this.state.description}>
-          </TextInput>
-          <TouchableHighlight
-            underlayColor='#cbcbcb'
-            style={Object.assign({}, styles.touchable, styles.backOrange)}
-            onPress={() => this.sendUpdate()}>
-            <Text style={styles.buttonSmall}>Submit</Text>
-          </TouchableHighlight>
-        </View>
-      </>
-    )
+        </>
+      )
   }
 }
 

@@ -1,4 +1,4 @@
-import { viewData, getServices } from '../actions/PageAction';
+import { viewData, getServices, setPageToMap, setPageToView } from '../actions/PageAction';
 
 const defaultState = {
   view: null,

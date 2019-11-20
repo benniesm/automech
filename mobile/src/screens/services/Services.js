@@ -19,7 +19,7 @@ class ServicesContainer extends Component {
     <>
       <Header
         drawer={this.props.navigation.openDrawer}
-        page='Available Vendors' />
+        page='Vendor Profile' />
       <View style={styles.window}>
         {
           this.props.state.page.pageTo === 'map' ?

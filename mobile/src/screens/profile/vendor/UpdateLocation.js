@@ -17,6 +17,7 @@ import {
 import fetchApi from '../../../api/Fetch';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
+import Loading from '../../../components/Loading';
 import ShowMapView from '../../../components/MapView';
 
 class UpdateVendorLocationContainer extends Component {
@@ -52,30 +53,34 @@ class UpdateVendorLocationContainer extends Component {
   }
 
   render() {
-    return(
-      <>
-        <Header
-          drawer={this.props.navigation.openDrawer}
-          page='Change Location' />
-        <View style={styles.mainContent}>
-          <View style={styles.mapView2}>
-            <ShowMapView parent='me' />
-          </View>
-            <View>
-              <TouchableHighlight
-  							style={Object.assign(
-  								{},
-  								styles.touchable2,
-  								styles.backOrange,
-                  { minWidth: '100%' }
-  								)}
-  							onPress={() => this.updateLocation()}>
-  								<Text style={styles.buttonSmall}>UPDATE LOCATION </Text>
-  						</TouchableHighlight>
+    return this.props.state.load.loading === true ?
+      <View style={styles.loading}><Loading /></View>
+      :
+      (
+        <>
+          <Header
+            drawer={this.props.navigation.openDrawer}
+            page='Edit My Location'
+            nav={this.props.navigation} />
+          <View style={styles.mainContent}>
+            <View style={styles.mapView2}>
+              <ShowMapView parent='me' />
             </View>
-          </View>
-      </>
-    )
+              <View>
+                <TouchableHighlight
+    							style={Object.assign(
+    								{},
+    								styles.touchable2,
+    								styles.backOrange,
+                    { minWidth: '100%' }
+    								)}
+    							onPress={() => this.updateLocation()}>
+    								<Text style={styles.buttonSmall}>UPDATE LOCATION </Text>
+    						</TouchableHighlight>
+              </View>
+            </View>
+        </>
+      )
   }
 }
 

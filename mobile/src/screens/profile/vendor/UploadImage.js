@@ -7,8 +7,10 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
+import { imagesUrlProfiles } from '../../../api/Api';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
+import Loading from '../../../components/Loading';
 
 class UploadVendorImageContainer extends Component {
   constructor(props) {
@@ -18,8 +20,7 @@ class UploadVendorImageContainer extends Component {
       image: vendorProfile.image === null ?
         require('../../../assets/images/avatar-icon.jpg')
         :
-        vendorProfile.image,
-      uploadImage: ''
+        { uri: imagesUrlProfiles + vendorProfile.image }
     }
   }
 
@@ -33,22 +34,23 @@ class UploadVendorImageContainer extends Component {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log(response.uri);
+      //console.log(response);
 
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        //console.log('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        //console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
+        //console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = { uri: response.uri };
-        const uploadSource = response.uri;
+        const source = {
+          uri: response.uri,
+          name: response.fileName,
+          type: response.type,
+          size: response.fileSize
+        };
 
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        this.setState({ image: source, uploadImage: uploadSource });
+        this.setState({ image: source });
       }
     });
   }
@@ -56,61 +58,70 @@ class UploadVendorImageContainer extends Component {
   uploadImage = async() => {
     const profileData = this.props.state.auth.profile;
 
-    const formData = new FormData();
-    formData.append('api_token', profileData.api_token);
-    formData.append('image', this.state.uploadImage);
-    formData.append('oldImage', this.props.state.auth.profile.vendor.image);
+    if (this.state.image && this.state.image.size > 1) {
+      const formData = new FormData();
+      formData.append('api_token', profileData.api_token);
+      formData.append('image', this.state.image);
+      formData.append('oldImage', this.props.state.auth.profile.vendor.image);
 
-    this.props.loadOn();
-    let uploadRequest = await fetchApi.fetchNow(
-			'post',
-			{
-				'url': 'vendors/image',
-				'fetchId': profileData.vendor.id,
-        'content': 'multipart/form-data',
-				'body': formData
-			}
-		);
-    this.props.loadOff();
+      this.props.loadOn();
+      let uploadRequest = await fetchApi.fetchNow(
+  			'post',
+  			{
+  				'url': 'vendors/image',
+  				'fetchId': profileData.vendor.id,
+          'content': 'multipart/form-data',
+  				'body': formData
+  			}
+  		);
+      this.props.loadOff();
 
-		if (uploadRequest.status === 200) {
-      const updatedData = uploadRequest.data;
-      profileData['vendor'] = updatedData;
-      this.props.saveProfile(profileData);
+  		if (uploadRequest.status === 200) {
+        const updatedData = uploadRequest.data;
+        profileData['vendor'] = updatedData;
+        this.props.saveProfile(profileData);
 
-			this.props.navigation.navigate('Vendor');
-		} else {
-      Alert.alert('Request Error, Please try again');
-      console.log({ 's': uploadRequest.status, 'd': uploadRequest.data});
+  			this.props.navigation.navigate('Vendor');
+  		} else {
+        Alert.alert('Unsuccesful, Please try again');
+        //console.log({ 's': uploadRequest.status, 'd': uploadRequest.data});
+      }
+
+    } else {
+      Alert.alert('Invalid Image File');
     }
   }
 
   render() {
-    return (
-      <>
-        <Header
-          drawer={this.props.navigation.openDrawer}
-          page='Change Image' />
-        <View style={styles.mainContent}>
-          <Image
-            style={{width: 170, height: 170}}
-            source={this.state.image}
-           />
-          <TouchableHighlight
-            underlayColor='#cbcbcb'
-            style={Object.assign({}, styles.touchable, styles.backGray)}
-            onPress={() => this.getPhoto()}>
-            <Text style={styles.buttonSmall}>Select photo</Text>
-          </TouchableHighlight>
-         <TouchableHighlight
-           underlayColor='#cbcbcb'
-           style={Object.assign({}, styles.touchable, styles.backOrange)}
-           onPress={() => this.uploadImage()}>
-           <Text style={styles.buttonSmall}>UPLOAD NEW PHOTO</Text>
-         </TouchableHighlight>
-        </View>
-      </>
-    );
+    return this.props.state.load.loading === true ?
+      <View style={styles.loading}><Loading /></View>
+      :
+      (
+        <>
+          <Header
+            drawer={this.props.navigation.openDrawer}
+            page='Edit Image'
+            nav={this.props.navigation} />
+          <View style={styles.mainContent}>
+            <Image
+              style={{width: 170, height: 170}}
+              source={this.state.image}
+             />
+            <TouchableHighlight
+              underlayColor='#cbcbcb'
+              style={Object.assign({}, styles.touchable, styles.backGray)}
+              onPress={() => this.getPhoto()}>
+              <Text style={styles.buttonSmall}>Select photo</Text>
+            </TouchableHighlight>
+           <TouchableHighlight
+             underlayColor='#cbcbcb'
+             style={Object.assign({}, styles.touchable, styles.backOrange)}
+             onPress={() => this.uploadImage()}>
+             <Text style={styles.buttonSmall}>UPLOAD NEW PHOTO</Text>
+           </TouchableHighlight>
+          </View>
+        </>
+      );
   }
 }
 

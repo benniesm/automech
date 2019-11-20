@@ -11,6 +11,7 @@ import {
   mapStateToProps,
   mapDispatchToProps
 } from '../store/StateDispatch';
+import { imagesUrlProfiles } from '../api/Api';
 import styles from '../../Styles';
 import Header from './Header';
 
@@ -21,7 +22,7 @@ class VendorViewContainer extends Component {
     const venDist = venProps.distance;
 
     const Vendor = () => {
-      return(
+      return (
         <View>
           <View style={Object.assign(
             {},
@@ -35,7 +36,7 @@ class VendorViewContainer extends Component {
                     vendorData.image === null || vendorData.image === ''?
                       require('../assets/images/avatar-icon.jpg')
                       :
-                      vendorData.image
+                      { uri: imagesUrlProfiles + vendorData.image }
                   }
                  />
                </View>

@@ -116,7 +116,8 @@ class ViewBasicProfileContainer extends Component {
           <>
             <Header
               drawer={this.props.navigation.openDrawer}
-              page='User Information' />
+              page='My Profile'
+              nav={this.props.navigation} />
             <View style={Object.assign({}, styles.window)}>
               <ScrollView style={Object.assign(
                 {},

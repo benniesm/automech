@@ -12,11 +12,20 @@ import {
   View,
   Text,
 } from 'react-native';
+import { setCustomText } from 'react-native-global-props';
 import { Provider } from 'react-redux';
 import { persistor, store } from './src/store/Store';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import styles from './Styles.js';
 import Navigator from './src/Navigator';
+
+const customTextProps = {
+  style: {
+    fontFamily: 'Roboto',
+  }
+}
+
+setCustomText(customTextProps);
 
 const App: () => React$Node = () => {
   return 2 === 0 ?

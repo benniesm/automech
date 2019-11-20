@@ -27,9 +27,8 @@ const getApi = async(params) => {
   }
 
   const token = params.token;
-  //console.log(token);
 
-  console.log(url + view + '?' + params.data + '&api_token=' + token);
+  //console.log(url + view + '?' + params.data + '&api_token=' + token);
   const response =
     await fetch(url + view + '?' + params.data + '&api_token=' + token, {
       headers: {
@@ -41,8 +40,11 @@ const getApi = async(params) => {
     });
   const jsonStatus = await response.status;
   const jsonData = await response.json();
-  if (jsonStatus >= 300){
+  if (500 > jsonStatus >= 300){
     return {'status': jsonStatus, 'data': jsonData};
+  }
+  if (jsonStatus >= 500) {
+    return {'status': jsonStatus, 'data': 'server Error'}
   }
   return {'status': jsonStatus, 'data': jsonData};
 }
@@ -50,39 +52,44 @@ const getApi = async(params) => {
 const postApi = async(params) => {
   let url = fetchUrl(params.url);
   let view = '';
-  let content = 'application/json';
+  let headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  };
+  let body = JSON.stringify(params.body);
 
   if (params.hasOwnProperty('fetchId')) {
     view = '/' + params.fetchId;
   }
 
-  if (params.hasOwnProperty('content')) {
-    content = params.content;
+  if (params.hasOwnProperty('content')
+    && params.content === 'multipart/form-data') {
+    headers = {
+      'Accept': 'application/json'
+    };
+    body = params.body;
   }
-  //console.log(token);
 
-  //console.log(JSON.stringify(params.body));
-  //console.log(url + view);
   const response = await fetch(url + view, {
     method: 'POST',
-    headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-      'content-type': content
-    },
-    body: JSON.stringify(params.body)
+    headers: headers,
+    body: body
   }).catch(err => {
     throw {'status': 0, 'data': err};
   });
+
   const jsonStatus = await response.status;
   const jsonData = await response.json();
-  if (jsonStatus >= 300) {
+  if (500 > jsonStatus >= 300) {
     return {'status': jsonStatus, 'data': jsonData};
   }
+  if (jsonStatus >= 500) {
+    return {'status': jsonStatus, 'data': 'server Error'}
+  }
   return {'status': jsonStatus, 'data': jsonData};
-}
 
-//if response error
+  console.log(response);
+}
 
 const putApi = async(params) => {
   let url = fetchUrl(params.url);
@@ -101,8 +108,11 @@ const putApi = async(params) => {
   });
   const jsonStatus = await response.status;
   const jsonData = await response.json();
-  if (jsonStatus >= 300) {
+  if (500 > jsonStatus >= 300) {
     return {'status': jsonStatus, 'data': jsonData};
+  }
+  if (jsonStatus >= 500) {
+    return {'status': jsonStatus, 'data': 'server Error'}
   }
   return {'status': jsonStatus, 'data': jsonData};
 }

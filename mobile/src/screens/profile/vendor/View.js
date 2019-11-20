@@ -14,6 +14,7 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
+import { imagesUrlProfiles } from '../../../api/Api';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 import Loading from '../../../components/Loading';
@@ -22,9 +23,6 @@ import SignInButton from '../../../components/SignInButton';
 class ViewVendorProfileContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      image: require('../../../assets/images/avatar-icon.jpg')
-    }
   }
 
   componentDidMount() {
@@ -66,7 +64,10 @@ class ViewVendorProfileContainer extends Component {
               <View style={{ width: '85%' }}>
                 <Image
                   style={{width: 150, height: 150, borderRadius: 100}}
-                  source={this.state.image}
+                  source={vendorData.image === null ?
+                    require('../../../assets/images/avatar-icon.jpg')
+                    :
+                    { uri: imagesUrlProfiles + vendorData.image }}
                  />
                </View>
                <View style={styles.editIcon}>
@@ -150,7 +151,8 @@ class ViewVendorProfileContainer extends Component {
           <>
             <Header
               drawer={this.props.navigation.openDrawer}
-              page='Vendor Information' />
+              page='My Vendor Profile'
+              nav={this.props.navigation} />
             <View style={Object.assign({}, styles.window)}>
               {
                 this.props.state.auth.profile.vendor === null ?

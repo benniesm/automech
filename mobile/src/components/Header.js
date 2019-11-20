@@ -28,12 +28,14 @@ class Header extends Component {
               onPress={() => this.showMenu()} />
             </View>
             <View style={styles.headerTitle}>
+              {/*
               <View style={styles.headerIcons}>
                 <Icon
                 name='chevron-left'
-                color='maroon'
+                color='white'
                 size={35} />
               </View>
+              */}
               <View>
                 <Text style={Object.assign(
         					{},
@@ -44,12 +46,14 @@ class Header extends Component {
                   {this.props.page}
                   </Text>
                 </View>
+                {/*
                 <View style={styles.headerIcons}>
                   <Icon
                   name='chevron-right'
                   color='maroon'
                   size={35} />
                 </View>
+                */}
             </View>
           </View>
     )

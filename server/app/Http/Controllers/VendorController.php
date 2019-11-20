@@ -69,27 +69,28 @@ class VendorController extends Controller
     public function update_image(Request $request,  Vendor $vendor)
     {
         if (!$request->hasFile('image')) {
-        	return response()->json($request, 406);
+        	return response()->json($request, 400);
         }
 
         $file = $request->file('image');
         if (!$file->isValid()) {
-        	return response()->json($request, 407);
+        	return response()->json($request, 415);
         }
 
         $path = public_path().'/uploads/profiles/images/';
         $random_name = rand(101010101010,999999999999);
         $image_file = $random_name.$file->getClientOriginalName();
         if ($file->move($path, $image_file)) {
-			      if (file_exists($path.$request['oldImage'])) {
-				    unlink($path.$request['oldImage']);
-			  }
+            if($request['oldImage'] !== null) {
+  			      if (file_exists($path.$request['oldImage'])) {
+  				        unlink($path.$request['oldImage']);
+  			      }
+            }
 
-  			$data = Vendor::find($request['id']);
+  			$data = $vendor;
   			$data->image = $image_file;
   			$data->save();
 
-  			$data =  Vendor::with('service_type')->find($vendor);
         $service_type = ServiceType::where('id', $data->service_id)->first();
         $data['service'] = $service_type;
 

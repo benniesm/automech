@@ -33,7 +33,7 @@ class Container extends Component {
 
   getMyPosition = () => {
 		Geolocation.watchPosition(info => {
-      console.log(info.coords)
+      //console.log(info.coords)
 
       let currentCoords = info.coords;
       currentCoords.latitudeDelta = 0.0100;
@@ -49,7 +49,7 @@ class Container extends Component {
         description: 'AutoMech keeps you connected!'
       };
       this.props.markMeSet(marks);
-      console.log(this.props.state.map);
+      //console.log(this.props.state.map);
     });
   }
 
@@ -102,7 +102,7 @@ class Container extends Component {
 
     if (services.status === 200) {
       this.props.servicesGet(services.data);
-      console.log(this.props.state.page.list);
+      console.log(this.props.navigation);
     }
   }
 
@@ -119,7 +119,8 @@ class Container extends Component {
           <>
             <Header
               drawer={this.props.navigation.openDrawer}
-              page='AUTOMECH' />
+              page='AutoMech'
+              nav={this.props.navigation} />
             <View style={styles.window}>
               <ScreensIndex nav={this.props.navigation.navigate} />
             </View>
