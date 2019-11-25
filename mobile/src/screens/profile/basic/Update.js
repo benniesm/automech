@@ -44,7 +44,6 @@ class UpdateBasicProfileContainer extends Component {
 		if (updateRequest.status === 200) {
       const updatedData = updateRequest.data;
       this.props.saveProfile(updatedData);
-      //console.log(updateRequest.data);
 
 			this.props.navigation.navigate('Profile');
 		} else {

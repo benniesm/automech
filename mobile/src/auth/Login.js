@@ -46,7 +46,6 @@ class LoginContainer extends Component {
 			return;
 		}
 
-	//console.log('confirmRequest');
 		this.setState({
 			confirm: 'Resend code',
 			errorMessage: '',
@@ -59,9 +58,8 @@ class LoginContainer extends Component {
 		let confirmRequest = await fetchApi.fetchNow(
 			'get',
 			{'url': 'confirm-code', 'data': 'mobile=' + mobile_number}
-		).catch(e => console.console.log(e));
+		);
 		this.props.loadOff();
-		console.log(confirmRequest);
 
 		if (confirmRequest.status === 200) {
 			this.setState({
@@ -119,12 +117,9 @@ class LoginContainer extends Component {
 		);
 		this.props.loadOff();
 
-		//console.log(signInRequest);
 		if (signInRequest.status === 200
 			|| signInRequest.status === 201) {
-				//console.log(signInRequest.data.data)
 				const data = signInRequest.data.data;
-				//console.log(authData);
 
 				if (data.vendor !== null) {
 					this.props.vendOn();
@@ -135,14 +130,12 @@ class LoginContainer extends Component {
 					codeConfirm: '',
 					confirm: 'Send confirmation code'
 				});
-				console.log(this.props.state.auth.profile);
 
 				this.props.navigation.navigate('Home');
 		} else {
 			this.setState({
 				errorMessage: 'Invalid login or registration credentials',
 			});
-		//	console.log(signInRequest);
 		}
 	}
 

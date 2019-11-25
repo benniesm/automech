@@ -28,13 +28,8 @@ class UpdateVendorProfileContainer extends Component {
     }
   }
 
-  componentDidMount() {
-  //  console.log(this.props.state.auth.profile.vendor.service.id);
-  }
-
   sendUpdate = async() => {
     const profileData = this.props.state.auth.profile;
-    //console.log(this.state.serviceId)
 
     this.props.loadOn();
     let updateRequest = await fetchApi.fetchNow(
@@ -58,7 +53,6 @@ class UpdateVendorProfileContainer extends Component {
       newAuthData.vendor.service.service_type =
         updatedData.service.service_type;
       this.props.saveProfile(newAuthData);
-      //console.log(this.props.state.auth.profile);
 
 			this.props.navigation.navigate('Vendor');
 		} else {

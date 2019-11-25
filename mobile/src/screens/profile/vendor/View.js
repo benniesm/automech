@@ -25,17 +25,11 @@ class ViewVendorProfileContainer extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    //this.getVendor();
-    //console.log(this.props.state.auth.profile);
-  }
-
   editImage = () => {
     this.props.navigation.navigate('UploadVendorImage');
   }
 
   editLocation = () => {
-    console.log(this.props.state.map.markMe);
     this.props.navigation.navigate('UpdateVendorLocation');
   }
 

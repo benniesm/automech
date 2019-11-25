@@ -24,7 +24,6 @@ class UpdateVendorLocationContainer extends Component {
   updateLocation = async() => {
     const profileData = this.props.state.auth.profile;
     const vendorCoords = this.props.state.map.markMe.latlng;
-    console.log(vendorCoords);
 
     this.props.loadOn();
     let updateRequest = await fetchApi.fetchNow(

@@ -33,7 +33,6 @@ class Container extends Component {
 
   getMyPosition = () => {
 		Geolocation.watchPosition(info => {
-      //console.log(info.coords)
 
       let currentCoords = info.coords;
       currentCoords.latitudeDelta = 0.0100;
@@ -49,19 +48,16 @@ class Container extends Component {
         description: 'AutoMech keeps you connected!'
       };
       this.props.markMeSet(marks);
-      //console.log(this.props.state.map);
     });
   }
 
   getProfile = async() => {
     const profileData = this.props.state.auth.profile;
-    //console.log(profileData);
     if (profileData === null) {
       this.props.loadOff();
       this.props.navigation.navigate('Sign');
       return;
     }
-    console.log(profileData);
 
     this.props.loadOn();
     let myProfile = await fetchApi.fetchNow(
@@ -102,7 +98,6 @@ class Container extends Component {
 
     if (services.status === 200) {
       this.props.servicesGet(services.data);
-      console.log(this.props.navigation);
     }
   }
 

@@ -27,10 +27,6 @@ class CreateVendorProfileContainer extends Component {
     }
   }
 
-  componentDidMount() {
-    //this.getServiceTypes();
-  }
-
   setVendorLocation = async() => {
     const profileData = this.props.state.auth.profile;
     const vendorCoords = this.props.state.map.coords;
@@ -60,15 +56,11 @@ class CreateVendorProfileContainer extends Component {
 		if (createRequest.status === 201) {
       const createdData = createRequest.data;
       profileData['vendor'] = createdData;
-      //console.log({'cd':createdData});
-      //console.log({'old':profileData});
       this.props.saveProfile(profileData);
-      //console.log({'new':this.props.state.auth.profile});
       this.props.vendOn();
 
 			this.props.navigation.navigate('Vendor');
 		} else {
-      //Alert.alert(createRequest.data);
       Alert.alert('Request Error, Please try again');
     }
   }

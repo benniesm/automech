@@ -28,7 +28,6 @@ const getApi = async(params) => {
 
   const token = params.token;
 
-  //console.log(url + view + '?' + params.data + '&api_token=' + token);
   const response =
     await fetch(url + view + '?' + params.data + '&api_token=' + token, {
       headers: {
@@ -87,15 +86,12 @@ const postApi = async(params) => {
     return {'status': jsonStatus, 'data': 'server Error'}
   }
   return {'status': jsonStatus, 'data': jsonData};
-
-  console.log(response);
 }
 
 const putApi = async(params) => {
   let url = fetchUrl(params.url);
   let view = '/' + params.fetchId;
 
-  //console.log(url + view);
   const response = await fetch(url + view, {
     method: 'PUT',
     headers: {

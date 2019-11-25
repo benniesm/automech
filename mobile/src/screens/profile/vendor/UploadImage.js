@@ -34,8 +34,6 @@ class UploadVendorImageContainer extends Component {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      //console.log(response);
-
       if (response.didCancel) {
         //console.log('User cancelled image picker');
       } else if (response.error) {
@@ -84,7 +82,6 @@ class UploadVendorImageContainer extends Component {
   			this.props.navigation.navigate('Vendor');
   		} else {
         Alert.alert('Unsuccesful, Please try again');
-        //console.log({ 's': uploadRequest.status, 'd': uploadRequest.data});
       }
 
     } else {

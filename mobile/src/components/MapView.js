@@ -14,13 +14,7 @@ class MapViewContainer extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    //this.getMyCoordinates();
-    //console.log(this.props.state.map);
-  }
-
   changeCoordinates = (coordinates) => {
-    //console.log(coordinates);
     const oldCoordinates = this.props.state.map.coords;
     let newCoordinates = {
       latitude: coordinates.latitude,
@@ -29,7 +23,6 @@ class MapViewContainer extends Component {
       longitudeDelta: oldCoordinates.longitudeDelta
     }
 
-    //console.log(this.props.state.map.markMe);
     let newMark =
       {
         latlng: {
@@ -42,7 +35,6 @@ class MapViewContainer extends Component {
 
     this.props.coordsSet(newCoordinates);
     this.props.markMeSet(newMark);
-    console.log(this.props.state.map.markMe);
   }
 
   viewVendor = (ven) => {
@@ -81,11 +73,7 @@ class MapViewContainer extends Component {
     const coordsNow = this.props.state.map;
     const markMe = coordsNow.markMe;
     const markVendors = coordsNow.markVendors;
-    /*
-    return this.props.state.map.markVendors.map(m => {
-      <Text>{m.latitude}</Text>
-    })
-    */
+
     return(
       <MapView
         style={styles.map}
@@ -116,9 +104,6 @@ class MapViewContainer extends Component {
                   onPress={() => this.viewVendor(marker)}
                 />
               )
-              {
-                console.log('marker.user')
-              }
             })
         }
       </MapView>
