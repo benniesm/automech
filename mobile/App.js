@@ -28,24 +28,15 @@ const customTextProps = {
 setCustomText(customTextProps);
 
 const App: () => React$Node = () => {
-  return 2 === 0 ?
-  (
-    <View style={Object.assign({}, styles.window, styles.bg1)}>
-      <View style={styles.welcome}>
-        <Text style={Object.assign({}, styles.textH1, styles.textColorWhite)}>
-          AutoMech
-        </Text>
-      </View>
-    </View>
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <View style={styles.container}>
+          <Navigator style={styles.body} />
+        </View>
+      </PersistGate>
+    </Provider>
   )
-  :
-  <Provider store={store}>
-    <PersistGate persistor={persistor}>
-      <View style={styles.container}>
-        <Navigator style={styles.body} />
-      </View>
-    </PersistGate>
-  </Provider>
 };
 
 export default App;

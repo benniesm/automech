@@ -1,3 +1,15 @@
+const confirmationScreen = () => {
+  return {
+    type: 'CONFIRMATION_SCREEN'
+  }
+};
+
+const loginScreen = () => {
+  return {
+    type: 'LOGIN_SCREEN'
+  }
+};
+
 const loginUser = (data) => {
   return {
     type: 'LOGIN',
@@ -18,4 +30,4 @@ const profileUser = (data) => {
   }
 };
 
-export { loginUser, logoutUser, profileUser };
+export { confirmationScreen, loginScreen, loginUser, logoutUser, profileUser };

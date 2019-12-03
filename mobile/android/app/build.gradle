@@ -151,9 +151,9 @@ android {
         }
   		release {
       		storeFile file('key-automech.keystore')
-      		storePassword ''
+      		storePassword 'chevrolet1'
       		keyAlias 'key-automech'
-      		keyPassword ''
+      		keyPassword 'chevrolet1'
    		}
     }
     buildTypes {

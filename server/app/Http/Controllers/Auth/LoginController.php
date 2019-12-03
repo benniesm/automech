@@ -57,7 +57,7 @@ class LoginController extends Controller
             $user['vendor'] = $vendor;
             if ($vendor !== null) {
               $service_type = ServiceType::where('id', $vendor->service_id)->first();
-              $user->vendor['service'] = $service_type;              
+              $user->vendor['service'] = $service_type;
             }
 
 				    return response()->json([
@@ -104,9 +104,9 @@ class LoginController extends Controller
             }
         }
 
-        $sms = 'AutoMech confirmation: '.$code;
-        $username = 'foxychev';
-        $password = 'chevrolet';
+        $sms = $code;
+        $username = '';
+        $password = '';
 
         $client = new Client;
         $response = $client->request(

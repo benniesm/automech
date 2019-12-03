@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import {
+  Alert,
+  PermissionsAndroid,
   Text,
   TouchableHighlight,
   View,
 } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import Geolocation from '@react-native-community/geolocation';
 import { connect } from 'react-redux';
 import {
@@ -14,6 +13,7 @@ import {
   mapDispatchToProps
 } from './store/StateDispatch';
 import fetchApi from './api/Fetch';
+import requestPermissions from './functions/PermissionsRequest';
 import styles from '../Styles';
 import Header from './components/Header';
 import Loading from './components/Loading';
@@ -26,12 +26,24 @@ class Container extends Component {
 	}
 
   componentDidMount() {
-    this.getProfile();
-    this.getServiceTypes();
-    this.getMyPosition();
+      this.getProfile();
+      this.getServiceTypes();
+      this.getMyPosition();
   }
 
-  getMyPosition = () => {
+  getMyPosition = async() => {
+    try {
+      const granted = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+      );
+      if (!granted) {
+        requestPermissions();
+        return;
+      }
+    } catch(e) {
+      Alert.alert('Could not determine app permissions');
+    }
+
 		Geolocation.watchPosition(info => {
 
       let currentCoords = info.coords;
@@ -71,6 +83,12 @@ class Container extends Component {
     );
     this.props.loadOff();
 
+    if (myProfile.status === 0) {
+      this.props.navigation.navigate('Sign');
+      requestPermissions();
+      return;
+    }
+
     if (myProfile.status !== 200) {
       this.props.navigation.navigate('Sign');
     }
@@ -95,6 +113,11 @@ class Container extends Component {
       }
     );
     this.props.loadOff();
+
+    if (services.status === 0) {
+      requestPermissions();
+      return;
+    }
 
     if (services.status === 200) {
       this.props.servicesGet(services.data);

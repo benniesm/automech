@@ -7,6 +7,7 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
+import requestPermissions from '../../../functions/PermissionsRequest';
 import { imagesUrlProfiles } from '../../../api/Api';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
@@ -73,6 +74,11 @@ class UploadVendorImageContainer extends Component {
   			}
   		);
       this.props.loadOff();
+
+      if (uploadRequest.status === 0) {
+        requestPermissions();
+        return;
+      }
 
   		if (uploadRequest.status === 200) {
         const updatedData = uploadRequest.data;

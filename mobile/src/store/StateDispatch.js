@@ -2,7 +2,13 @@ import {
   loadingOff,
   loadingOn
 } from './actions/LoadingAction';
-import { loginUser, logoutUser, profileUser } from './actions/AuthAction';
+import {
+  confirmationScreen,
+  loginScreen,
+  loginUser,
+  logoutUser,
+  profileUser
+} from './actions/AuthAction';
 import { setCoords, setMarkMe, setMarkVendors } from './actions/MapAction';
 import {
   viewData,
@@ -23,6 +29,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    screenConfirm: () => {
+      dispatch(confirmationScreen())
+    },
+    screenLogin: () => {
+      dispatch(loginScreen())
+    },
     authenticateUser: (data) => {
       dispatch(loginUser(data))
     },

@@ -20,12 +20,14 @@ import {
   mapDispatchToProps
 } from '../store/StateDispatch';
 import fetchApi from '../api/Fetch';
+import requestPermissions from '../functions/PermissionsRequest';
 import styles from '../../Styles';
 
 class ScreensIndexContainer extends Component {
   constructor(props) {
     super(props);
   }
+
   getVendors = async(service) => {
     const profileData = this.props.state.auth.profile;
 
@@ -40,6 +42,11 @@ class ScreensIndexContainer extends Component {
       }
     );
     this.props.loadOff();
+
+    if (serviceVendors.status === 0) {
+      requestPermissions();
+      return;
+    }
 
     if (serviceVendors.status === 200) {
       this.props.markVendorsSet(serviceVendors.data);

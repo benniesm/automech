@@ -1,6 +1,15 @@
 import { StyleSheet } from "react-native"
 
 export default StyleSheet.create({
+  allContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+  },
   backGray: {
     backgroundColor: 'gray',
   },
@@ -18,6 +27,14 @@ export default StyleSheet.create({
   },
   body: {
     height: '92%'
+  },
+  borderBlack: {
+    borderColor: 'black',
+    borderWidth: 1
+  },
+  borderWhite: {
+    borderColor: 'white',
+    borderWidth: 1
   },
   button: {
     borderRadius: 10,

@@ -13,6 +13,7 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
+import requestPermissions from '../../../functions/PermissionsRequest';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 import Loading from '../../../components/Loading';
@@ -45,6 +46,11 @@ class UpdateVendorProfileContainer extends Component {
 			}
 		);
     this.props.loadOff();
+
+    if (updateRequest.status === 0) {
+      requestPermissions();
+      return;
+    }
 
 		if (updateRequest.status === 200) {
       const updatedData = updateRequest.data;

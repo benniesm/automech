@@ -15,6 +15,7 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
+import requestPermissions from '../../../functions/PermissionsRequest';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 import ShowMapView from '../../../components/MapView';
@@ -52,6 +53,11 @@ class CreateVendorProfileContainer extends Component {
 			}
 		);
     this.props.loadOff();
+
+    if (createRequest.status === 0) {
+      requestPermissions();
+      return;
+    }
 
 		if (createRequest.status === 201) {
       const createdData = createRequest.data;

@@ -1,4 +1,6 @@
+import { Alert } from 'react-native';
 import { serverApi, countryCodes } from './Api';
+import getPermissions from '../functions/PermissionsCheck';
 
 function fetchUrl(urlName) {
   switch (urlName) {
@@ -117,22 +119,30 @@ function deleteApi(params) {
   let url = fetchUrl(params.url);
   let view = '/' + params.fetchId;
 
-  fetch().then().then().catch();
+  //fetch().then().then().catch();
 }
 
 const fetchApi = {
   fetchNow: async function (apiAction, params) {
-    switch (apiAction) {
-      case 'get':
-        return await getApi(params);
-      case 'post':
-        return await postApi(params);
-      case 'put':
-        return await putApi(params);
-      case 'delete':
-        return await deleteApi(params);
-      default:
-        return 'Bad Request';
+    const getPerms = await getPermissions();//console.log(getPerms);
+
+    if (getPerms === 'true') {
+      //console.log('yes');
+      switch (apiAction) {
+        case 'get':
+          return await getApi(params);
+        case 'post':
+          return await postApi(params);
+        case 'put':
+          return await putApi(params);
+        case 'delete':
+          return await deleteApi(params);
+        default:
+          return 'Bad Request';
+      }
+    } else {
+      console.log('no fetch');
+      return {'status': 0, 'data': 'no_fetch'};
     }
   }
 }
