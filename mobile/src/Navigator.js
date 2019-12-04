@@ -1,7 +1,8 @@
+import 'react-native-gesture-handler';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import React from 'react';
 import { createAppContainer, DrawerNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import SideMenu from './components/SideMenu';
 import Index from './Index';
 import Login from './auth/Login';
