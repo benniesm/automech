@@ -2,6 +2,7 @@ import { Alert } from 'react-native';
 import { serverApi, countryCodes } from './Api';
 import getPermissions from '../functions/PermissionsCheck';
 import requestPermissions from '../functions/PermissionsRequest';
+import uiData from '../assets/data/UiData';
 
 function fetchUrl(urlName) {
   switch (urlName) {
@@ -138,9 +139,15 @@ function deleteApi(params) {
 
 const fetchApi = {
   fetchNow: async function (apiAction, params) {
+    params.props.fetchInfoSet({
+      toFetch: apiAction,
+      parameters: params
+    });
+    
     const getPerms = await getPermissions();//console.log(getPerms);
 
     if (!getPerms) {
+      console.log(params.props.state.page);
       const requestPerms = await requestPermissions(params.props, params.info);
       if (!requestPerms) {
         return { 'status': 0, 'data': 'Permission not granted'}
@@ -165,10 +172,7 @@ const fetchApi = {
     const doneRequest = await executeRequest();
     //console.log(doneRequest);
     if (doneRequest.status === 1) {
-      params.props.notifyShow({
-        msg: 'Please check your  internet connection',
-        click: 'TAP HERE TO RETRY'
-      });
+      params.props.notifyShow(uiData.notifyInternet);
     }
     return doneRequest;
   }

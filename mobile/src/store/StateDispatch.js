@@ -2,6 +2,7 @@ import {
   loadingOff,
   loadingOn
 } from './actions/LoadingAction';
+import { setFetchInfo } from './actions/ApiAction';
 import {
   confirmationScreen,
   loginScreen,
@@ -44,6 +45,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     deAuthenticateUser: () => {
       dispatch(logoutUser())
+    },
+    fetchInfoSet: (data) => {
+      dispatch(setFetchInfo(data))
     },
     coordsSet: (data) => {
       dispatch(setCoords(data))

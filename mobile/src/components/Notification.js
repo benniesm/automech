@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Text, TouchableHighlight, View } from 'react-native';
+import AndroidOpenSettings from 'react-native-android-open-settings';
+import RNExitApp from 'react-native-exit-app';
 import { connect } from 'react-redux';
 import {
   mapStateToProps,
   mapDispatchToProps
 } from '../store/StateDispatch';
+import fetchApi from '../api/Fetch';
 import styles from '../../Styles.js';
 
 class NotificationContainer extends Component {
@@ -12,8 +15,24 @@ class NotificationContainer extends Component {
     super(props);
   }
 
-  takeAction = () => {
+  takeAction = async() => {
     this.props.notifyHide();
+
+    if (this.props.state.notify.info.note === 'internet') {
+      /*
+      this.props.loadOn();
+      let myProfile = await fetchApi.fetchNow(
+        this.props.state.api.toFetch,
+        this.props.state.api.parameters
+      );
+      this.props.loadOff();/z
+      */
+    }
+
+    if (this.props.state.notify.info.note === 'permissions') {
+      AndroidOpenSettings.appDetailsSettings();
+      RNExitApp.exitApp();
+    }
   }
 
   render() {

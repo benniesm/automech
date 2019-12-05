@@ -15,6 +15,7 @@ import {
 import fetchApi from './api/Fetch';
 import getPermissions from './functions/PermissionsCheck';
 import requestPermissions from './functions/PermissionsRequest';
+import uiData from './assets/data/UiData';
 import styles from '../Styles';
 import Header from './components/Header';
 import Loading from './components/Loading';
@@ -27,7 +28,7 @@ class Container extends Component {
 	}
 
   componentDidMount() {
-    //this.getMyPosition();
+    this.getMyPosition();
     this.getProfile();
     this.getServiceTypes();
   }
@@ -36,11 +37,10 @@ class Container extends Component {
     try {
       const granted = await getPermissions();
       if (!granted) {
-        const info = {
-          msg: 'You need to grant permissions to use AutoMech',
-          click: ' TAP HERE TO ENTER SETTINGS'
-        };
-        const grantPerms = await requestPermissions(this.props, info);
+        const grantPerms = await requestPermissions(
+          this.props,
+          uiData.notifyPerms
+        );
         if (!grantPerms) {
           return false;
         }
@@ -75,11 +75,6 @@ class Container extends Component {
       return;
     };
 
-    const info = {
-      msg: 'You need to grant permissions to use AutoMech',
-      click: ' TAP HERE TO ENTER SETTINGS'
-    };
-
     this.props.loadOn();
     let myProfile = await fetchApi.fetchNow(
       'get',
@@ -89,7 +84,7 @@ class Container extends Component {
         'data': '',
         'token': profileData.api_token,
         'props': this.props,
-        'info': info
+        'info': uiData.notifyPerms
       }
     );
     this.props.loadOff();
@@ -115,7 +110,8 @@ class Container extends Component {
         'url': 'service-types',
         'data': '',
         'token': profileData.api_token,
-        'props': this.props
+        'props': this.props,
+        'info': uiData.notifyPerms
       }
     );
     this.props.loadOff();
