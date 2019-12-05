@@ -1,4 +1,9 @@
-import { viewData, getServices, setPageToMap, setPageToView } from '../actions/PageAction';
+import {
+  viewData,
+  getServices,
+  setPageToMap,
+  setPageToView
+} from '../actions/PageAction';
 
 const defaultState = {
   view: null,
@@ -13,7 +18,7 @@ const pageReducer = (state = defaultState, action) => {
         view: action.view,
         list: state.list,
         pageTo: state.pageTo
-      };
+      }
     case 'SERVICE_TYPES':
       return {
         list: action.list,

@@ -32,6 +32,10 @@ export default StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1
   },
+  borderRed: {
+    borderColor: 'red',
+    borderWidth: 1
+  },
   borderWhite: {
     borderColor: 'white',
     borderWidth: 1
@@ -215,12 +219,25 @@ export default StyleSheet.create({
     paddingBottom: 10,
     paddingTop: 10
   },
-  tableIndex: {
+  notificationHide: {
+    display: 'none'
+  },
+  notificationShow: {
+    backgroundColor: 'black',
+    display: 'flex',
+    position: 'absolute',
+    bottom: 0,
+    height: '12%',
+    width: '100%',
+    padding: 5
   },
   text: {
   },
   textPadded: {
     padding: 10
+  },
+  textPaddedSmall: {
+    padding: 4
   },
   textCenter: {
     textAlign: 'center',
@@ -269,6 +286,10 @@ export default StyleSheet.create({
   },
   touchable2: {
     padding: 15,
+  },
+  touchable3: {
+    padding: 3,
+    minWidth: 'auto'
   },
   welcome: {
     alignItems: 'center',

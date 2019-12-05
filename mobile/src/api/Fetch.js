@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import { serverApi, countryCodes } from './Api';
 import getPermissions from '../functions/PermissionsCheck';
+import requestPermissions from '../functions/PermissionsRequest';
 
 function fetchUrl(urlName) {
   switch (urlName) {
@@ -11,13 +12,13 @@ function fetchUrl(urlName) {
   }
 }
 
-const timeout = async(ms, promise) => {
-  await new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject(new Error("timeout"))
-    }, ms)
-    promise.then(resolve, reject)
-  })
+const timeout = (url, options, timeout = 10) => {
+    return Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('timeout')), timeout)
+        )
+    ]);
 }
 
 const getApi = async(params) => {
@@ -31,14 +32,19 @@ const getApi = async(params) => {
   const token = params.token;
 
   const response =
-    await fetch(url + view + '?' + params.data + '&api_token=' + token, {
+    await timeout(url + view + '?' + params.data + '&api_token=' + token, {
       headers: {
     		'Accept': 'application/json',
     		'Content-Type': 'application/json',
       }
     }).catch(err => {
-      throw {'status': 0, 'data': err};
+      return {'status': 1, 'data': err};
     });
+
+  if (response.status === 1) {
+    return {'status': response.status, 'data': response.data};
+  }
+
   const jsonStatus = await response.status;
   const jsonData = await response.json();
   if (500 > jsonStatus >= 300){
@@ -47,7 +53,6 @@ const getApi = async(params) => {
   if (jsonStatus >= 500) {
     return {'status': jsonStatus, 'data': 'server Error'}
   }
-  return {'status': jsonStatus, 'data': jsonData};
 }
 
 const postApi = async(params) => {
@@ -71,13 +76,17 @@ const postApi = async(params) => {
     body = params.body;
   }
 
-  const response = await fetch(url + view, {
+  const response = await timeout(url + view, {
     method: 'POST',
     headers: headers,
     body: body
   }).catch(err => {
-    throw {'status': 0, 'data': err};
+    return {'status': 1, 'data': err};
   });
+
+  if (response.status === 1) {
+    return {'status': response.status, 'data': response.data};
+  }
 
   const jsonStatus = await response.status;
   const jsonData = await response.json();
@@ -94,7 +103,7 @@ const putApi = async(params) => {
   let url = fetchUrl(params.url);
   let view = '/' + params.fetchId;
 
-  const response = await fetch(url + view, {
+  const response = await timeout(url + view, {
     method: 'PUT',
     headers: {
 			'Accept': 'application/json',
@@ -102,8 +111,13 @@ const putApi = async(params) => {
     },
     body: JSON.stringify(params.body)
   }).catch(err => {
-    throw {'status': 0, 'data': err};
+    return {'status': 1, 'data': err};
   });
+
+  if (response.status === 1) {
+    return {'status': response.status, 'data': response.data};
+  }
+
   const jsonStatus = await response.status;
   const jsonData = await response.json();
   if (500 > jsonStatus >= 300) {
@@ -126,8 +140,14 @@ const fetchApi = {
   fetchNow: async function (apiAction, params) {
     const getPerms = await getPermissions();//console.log(getPerms);
 
-    if (getPerms === 'true') {
-      //console.log('yes');
+    if (!getPerms) {
+      const requestPerms = await requestPermissions(params.props, params.info);
+      if (!requestPerms) {
+        return { 'status': 0, 'data': 'Permission not granted'}
+      }
+    }
+    //console.log('yes');
+    const executeRequest = async() => {
       switch (apiAction) {
         case 'get':
           return await getApi(params);
@@ -140,10 +160,17 @@ const fetchApi = {
         default:
           return 'Bad Request';
       }
-    } else {
-      console.log('no fetch');
-      return {'status': 0, 'data': 'no_fetch'};
     }
+
+    const doneRequest = await executeRequest();
+    //console.log(doneRequest);
+    if (doneRequest.status === 1) {
+      params.props.notifyShow({
+        msg: 'Please check your  internet connection',
+        click: 'TAP HERE TO RETRY'
+      });
+    }
+    return doneRequest;
   }
 }
 

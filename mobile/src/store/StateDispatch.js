@@ -17,6 +17,10 @@ import {
   setPageToView
 } from './actions/PageAction';
 import {
+  showNotify,
+  hideNotify
+} from './actions/NotifyAction';
+import {
   vendorOn,
   vendorOff,
   selectVendor,
@@ -61,6 +65,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     loadOff: () => {
       dispatch(loadingOff())
+    },
+    notifyShow: (data) => {
+      dispatch(showNotify(data))
+    },
+    notifyHide: () => {
+      dispatch(hideNotify())
     },
     saveProfile: (data) => {
       dispatch(profileUser(data))

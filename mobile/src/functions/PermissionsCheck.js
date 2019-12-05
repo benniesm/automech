@@ -27,11 +27,11 @@ const getPermissions = async() => {
 
   if (permit) {
     console.log('permitted');
-    return 'true';
+    return true;
   }
 
   console.log('no permit')
-  return 'false';
+  return false;
 }
 
 export default getPermissions;

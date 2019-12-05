@@ -13,6 +13,7 @@ import {
   mapDispatchToProps
 } from './store/StateDispatch';
 import fetchApi from './api/Fetch';
+import getPermissions from './functions/PermissionsCheck';
 import requestPermissions from './functions/PermissionsRequest';
 import styles from '../Styles';
 import Header from './components/Header';
@@ -26,26 +27,29 @@ class Container extends Component {
 	}
 
   componentDidMount() {
-      this.getProfile();
-      this.getServiceTypes();
-      this.getMyPosition();
+    //this.getMyPosition();
+    this.getProfile();
+    this.getServiceTypes();
   }
 
   getMyPosition = async() => {
     try {
-      const granted = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-      );
+      const granted = await getPermissions();
       if (!granted) {
-        requestPermissions();
-        return;
+        const info = {
+          msg: 'You need to grant permissions to use AutoMech',
+          click: ' TAP HERE TO ENTER SETTINGS'
+        };
+        const grantPerms = await requestPermissions(this.props, info);
+        if (!grantPerms) {
+          return false;
+        }
       }
     } catch(e) {
-      Alert.alert('Could not determine app permissions');
+      //Alert.alert('Could not determine app permissions');
     }
 
 		Geolocation.watchPosition(info => {
-
       let currentCoords = info.coords;
       currentCoords.latitudeDelta = 0.0100;
       currentCoords.longitudeDelta = 0.0020;
@@ -69,7 +73,12 @@ class Container extends Component {
       this.props.loadOff();
       this.props.navigation.navigate('Sign');
       return;
-    }
+    };
+
+    const info = {
+      msg: 'You need to grant permissions to use AutoMech',
+      click: ' TAP HERE TO ENTER SETTINGS'
+    };
 
     this.props.loadOn();
     let myProfile = await fetchApi.fetchNow(
@@ -78,16 +87,12 @@ class Container extends Component {
         'url': 'profile',
         'fetchId': profileData.id,
         'data': '',
-        'token': profileData.api_token
+        'token': profileData.api_token,
+        'props': this.props,
+        'info': info
       }
     );
     this.props.loadOff();
-
-    if (myProfile.status === 0) {
-      this.props.navigation.navigate('Sign');
-      requestPermissions();
-      return;
-    }
 
     if (myProfile.status !== 200) {
       this.props.navigation.navigate('Sign');
@@ -109,13 +114,18 @@ class Container extends Component {
       {
         'url': 'service-types',
         'data': '',
-        'token': profileData.api_token
+        'token': profileData.api_token,
+        'props': this.props
       }
     );
     this.props.loadOff();
 
     if (services.status === 0) {
-      requestPermissions();
+      const info = {
+        msg: 'You need to grant permissions to use AutoMech',
+        click: 'GO TO SETTINGS'
+      }
+      //requestPermissions(this.props, info);
       return;
     }
 
