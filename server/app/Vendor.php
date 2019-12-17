@@ -8,11 +8,11 @@ class Vendor extends Model
 {
     protected $fillable =
 		[
-  			'user_id',
+		'user_id',
         'service_id',
-  			'image',
-  			'latitude',
-  			'longitude',
+		'image',
+		'latitude',
+		'longitude',
         'description',
         'rating',
         'certified'
@@ -26,5 +26,10 @@ class Vendor extends Model
     public function service_type()
     {
         return $this->hasOne(ServiceType::class);
+    }
+
+    public function car_model()
+    {
+        return $this->hasOne(CarModel::class);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Vendor;
 use App\ServiceType;
+use App\CarModel;
 
 class VendorController extends Controller
 {
@@ -17,6 +18,7 @@ class VendorController extends Controller
     {
         $service_type = ServiceType::where('id', $vendor->service_id)->first();
         $vendor['service'] = $service_type;
+        $vendor['car'] = $car_model;
         return $vendor;
     }
 
@@ -53,6 +55,7 @@ class VendorController extends Controller
         $vendor = Vendor::create($data);
         $service_type = ServiceType::where('id', $vendor->service_id)->first();
         $vendor['service'] = $service_type;
+        $vendor['car'] = $car_model;
         return response()->json($vendor, 201);
     }
 
@@ -62,6 +65,7 @@ class VendorController extends Controller
 
         $service_type = ServiceType::where('id', $vendor->service_id)->first();
         $vendor['service'] = $service_type;
+        $vendor['car'] = $car_model;
 
         return response()->json($vendor, 200);
     }
@@ -93,6 +97,7 @@ class VendorController extends Controller
 
         $service_type = ServiceType::where('id', $data->service_id)->first();
         $data['service'] = $service_type;
+        $data['car'] = $car_model;
 
 		    return response()->json($data, 200);
         } else {

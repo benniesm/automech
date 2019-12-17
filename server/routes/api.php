@@ -35,4 +35,7 @@ Route::group(['middleware' => ['auth:api', 'cors']], function() {
 
     Route::get('service-types', 'ServiceTypeController@index');
     Route::get('service-types/{service-type}', 'ServiceTypeController@show');
+
+    Route::get('car-models', 'CarModelController@index');
+    Route::get('car-models/{car-model}', 'CarModelController@show');
 });
