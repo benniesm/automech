@@ -43,6 +43,15 @@ const MyDrawerNavigator = createDrawerNavigator({
   Vendor: {
     screen: ViewVendorProfile,
   },
+  AutoLoan: {
+    screen: 'autoloan',
+  },
+  Insurance: {
+    screen: 'insurance',
+  },
+  Scanner: {
+    screen: 'scanner',
+  },
   Services: {
     screen: Services,
   },

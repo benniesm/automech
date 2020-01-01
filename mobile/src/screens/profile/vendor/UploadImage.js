@@ -7,8 +7,9 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
-import requestPermissions from '../../../functions/PermissionsRequest';
+import fetchRetry from '../../../functions/FetchRetry';
 import { imagesUrlProfiles } from '../../../api/Api';
+import uiData from '../../../assets/data/UiData';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 import Loading from '../../../components/Loading';
@@ -63,22 +64,19 @@ class UploadVendorImageContainer extends Component {
       formData.append('image', this.state.image);
       formData.append('oldImage', this.props.state.auth.profile.vendor.image);
 
-      this.props.loadOn();
       let uploadRequest = await fetchApi.fetchNow(
   			'post',
   			{
   				'url': 'vendors/image',
   				'fetchId': profileData.vendor.id,
           'content': 'multipart/form-data',
-  				'body': formData
+  				'body': formData,
+          'props': this.props,
+          'info': uiData.notifyPerms
   			}
   		);
-      this.props.loadOff();
 
-      if (uploadRequest.status === 0) {
-        requestPermissions();
-        return;
-      }
+      fetchRetry(uploadRequest, this.uploadImage);
 
   		if (uploadRequest.status === 200) {
         const updatedData = uploadRequest.data;

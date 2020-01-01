@@ -17,22 +17,6 @@ class NotificationContainer extends Component {
 
   takeAction = async() => {
     this.props.notifyHide();
-
-    if (this.props.state.notify.info.note === 'internet') {
-      /*
-      this.props.loadOn();
-      let myProfile = await fetchApi.fetchNow(
-        this.props.state.api.toFetch,
-        this.props.state.api.parameters
-      );
-      this.props.loadOff();/z
-      */
-    }
-
-    if (this.props.state.notify.info.note === 'permissions') {
-      AndroidOpenSettings.appDetailsSettings();
-      RNExitApp.exitApp();
-    }
   }
 
   render() {
@@ -44,7 +28,7 @@ class NotificationContainer extends Component {
           {},
           styles.textCenter,
           styles.textColorRed,
-          styles.textPaddedSmall
+          styles.textPadded
         )}>
           {state.notify.info.msg}
         </Text>
@@ -58,7 +42,7 @@ class NotificationContainer extends Component {
               {},
               styles.textColorRed,
               styles.textCenter,
-              styles.textSizeSmall
+              styles.textSizeMedium
             )}>{state.notify.info.click}</Text>
         </TouchableHighlight>
       </View>

@@ -13,6 +13,7 @@ import {
 import { setCoords, setMarkMe, setMarkVendors } from './actions/MapAction';
 import {
   viewData,
+  getModels,
   getServices,
   setPageToMap,
   setPageToView
@@ -87,6 +88,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     viewInfo: (data) => {
       dispatch(viewData(data))
+    },
+    modelsGet: (data) => {
+      dispatch(getModels(data))
     },
     servicesGet: (data) => {
       dispatch(getServices(data))

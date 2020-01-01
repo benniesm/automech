@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Text, TextInput, TouchableHighlight, View } from 'react-native';
+import { Alert, Text, TextInput, TouchableHighlight, View } from 'react-native';
 import { connect } from 'react-redux';
 import {
   mapStateToProps,
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
-import requestPermissions from '../../../functions/PermissionsRequest';
+import fetchRetry from '../../../functions/FetchRetry';
+import uiData from '../../../assets/data/UiData';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 import Loading from '../../../components/Loading';
@@ -26,7 +27,6 @@ class UpdateBasicProfileContainer extends Component {
   sendUpdate = async() => {
     const profileData = this.props.state.auth.profile;
 
-    this.props.loadOn();
     let updateRequest = await fetchApi.fetchNow(
 			'put',
 			{
@@ -37,15 +37,13 @@ class UpdateBasicProfileContainer extends Component {
 					name : this.state.name,
 					email: this.state.email,
           api_token: profileData.api_token
-				}
+				},
+        'props': this.props,
+        'info': uiData.notifyPerms
 			}
 		);
-    this.props.loadOff();
 
-    if (updateRequest.status === 0) {
-      requestPermissions();
-      return;
-    }
+    fetchRetry(updateRequest, this.sendUpdate);
 
 		if (updateRequest.status === 200) {
       const updatedData = updateRequest.data;

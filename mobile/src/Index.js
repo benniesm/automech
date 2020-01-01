@@ -13,6 +13,7 @@ import {
   mapDispatchToProps
 } from './store/StateDispatch';
 import fetchApi from './api/Fetch';
+import fetchRetry from './functions/FetchRetry';
 import getPermissions from './functions/PermissionsCheck';
 import requestPermissions from './functions/PermissionsRequest';
 import uiData from './assets/data/UiData';
@@ -30,18 +31,19 @@ class Container extends Component {
   componentDidMount() {
     this.getMyPosition();
     this.getProfile();
+    this.getCarModels();
     this.getServiceTypes();
+    //console.log(this.props.state.auth.profile);
   }
 
   getMyPosition = async() => {
     try {
       const granted = await getPermissions();
       if (!granted) {
-        const grantPerms = await requestPermissions(
-          this.props,
-          uiData.notifyPerms
-        );
+        const grantPerms = await requestPermissions();
         if (!grantPerms) {
+          const geoData = { 'status': 1, 'data': 'Permission not granted' }
+          fetchRetry(geoData, this.getMyPosition);
           return false;
         }
       }
@@ -70,12 +72,10 @@ class Container extends Component {
   getProfile = async() => {
     const profileData = this.props.state.auth.profile;
     if (profileData === null) {
-      this.props.loadOff();
       this.props.navigation.navigate('Sign');
       return;
     };
 
-    this.props.loadOn();
     let myProfile = await fetchApi.fetchNow(
       'get',
       {
@@ -87,10 +87,38 @@ class Container extends Component {
         'info': uiData.notifyPerms
       }
     );
-    this.props.loadOff();
+
+    fetchRetry(myProfile, this.getProfile);
 
     if (myProfile.status !== 200) {
       this.props.navigation.navigate('Sign');
+    }
+  }
+
+  getCarModels = async() => {
+    const profileData = this.props.state.auth.profile;
+
+    if (profileData === null) {
+      this.props.navigation.navigate('Sign');
+      return;
+    }
+
+    let models = await fetchApi.fetchNow(
+      'get',
+      {
+        'url': 'car-models',
+        'data': '',
+        'token': profileData.api_token,
+        'props': this.props,
+        'info': uiData.notifyPerms
+      }
+    );
+
+    fetchRetry(models, this.getCarModels);
+
+    if (models.status === 200) {
+      this.props.modelsGet(models.data);
+      //console.log(this.props.state.page.models);
     }
   }
 
@@ -98,12 +126,10 @@ class Container extends Component {
     const profileData = this.props.state.auth.profile;
 
     if (profileData === null) {
-      this.props.loadOff();
       this.props.navigation.navigate('Sign');
       return;
     }
 
-    this.props.loadOn();
     let services = await fetchApi.fetchNow(
       'get',
       {
@@ -114,19 +140,12 @@ class Container extends Component {
         'info': uiData.notifyPerms
       }
     );
-    this.props.loadOff();
 
-    if (services.status === 0) {
-      const info = {
-        msg: 'You need to grant permissions to use AutoMech',
-        click: 'GO TO SETTINGS'
-      }
-      //requestPermissions(this.props, info);
-      return;
-    }
+    fetchRetry(services, this.getServiceTypes);
 
     if (services.status === 200) {
       this.props.servicesGet(services.data);
+      //console.log(this.props.state.page.list);
     }
   }
 

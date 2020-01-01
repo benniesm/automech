@@ -16,9 +16,10 @@ class VendorController extends Controller
 
     public function show(Vendor $vendor)
     {
+        $car_model = CarModel::where('id', $vendor->cars)->first();
         $service_type = ServiceType::where('id', $vendor->service_id)->first();
         $vendor['service'] = $service_type;
-        $vendor['car'] = $car_model;
+        $vendor['model'] = $car_model;
         return $vendor;
     }
 
@@ -53,9 +54,10 @@ class VendorController extends Controller
         }
 
         $vendor = Vendor::create($data);
+        $car_model = CarModel::where('id', $vendor->cars)->first();
         $service_type = ServiceType::where('id', $vendor->service_id)->first();
         $vendor['service'] = $service_type;
-        $vendor['car'] = $car_model;
+        $vendor['model'] = $car_model;
         return response()->json($vendor, 201);
     }
 
@@ -63,9 +65,10 @@ class VendorController extends Controller
     {
         $vendor->update($request->all());
 
+        $car_model = CarModel::where('id', $vendor->cars)->first();
         $service_type = ServiceType::where('id', $vendor->service_id)->first();
         $vendor['service'] = $service_type;
-        $vendor['car'] = $car_model;
+        $vendor['model'] = $car_model;
 
         return response()->json($vendor, 200);
     }
@@ -95,9 +98,10 @@ class VendorController extends Controller
   			$data->image = $image_file;
   			$data->save();
 
+        $car_model = CarModel::where('id', $vendor->cars)->first();
         $service_type = ServiceType::where('id', $data->service_id)->first();
         $data['service'] = $service_type;
-        $data['car'] = $car_model;
+        $data['model'] = $car_model;
 
 		    return response()->json($data, 200);
         } else {

@@ -1,6 +1,6 @@
 import { PermissionsAndroid } from 'react-native';
 
-const requestPermissions = async(props, info) => {
+const requestPermissions = async() => {
   let permit = true;
   const listPermissions = [
     'CAMERA',
@@ -19,17 +19,11 @@ const requestPermissions = async(props, info) => {
         break;
       }
     } catch (err) {
-      console.log(err);
       permit = false;
     }
   }
-  console.log('per'); console.log(permit);
-  if (permit) {
-    return true;
-  }
 
-  props.notifyShow(info);
-  return false;
+  return permit;
 }
 
 export default requestPermissions;

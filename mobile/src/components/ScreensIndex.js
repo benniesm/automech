@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   Image,
   ImageBackground,
   Text,
@@ -20,7 +21,8 @@ import {
   mapDispatchToProps
 } from '../store/StateDispatch';
 import fetchApi from '../api/Fetch';
-import requestPermissions from '../functions/PermissionsRequest';
+import fetchRetry from '../functions/FetchRetry';
+import uiData from '../assets/data/UiData';
 import styles from '../../Styles';
 
 class ScreensIndexContainer extends Component {
@@ -31,22 +33,19 @@ class ScreensIndexContainer extends Component {
   getVendors = async(service) => {
     const profileData = this.props.state.auth.profile;
 
-    this.props.loadOn();
     let serviceVendors = await fetchApi.fetchNow(
       'get',
       {
         'url': 'vendors/services',
         'fetchId': service,
         'data': 'service_id=' + service,
-        'token': profileData.api_token
+        'token': profileData.api_token,
+        'props': this.props,
+        'info': uiData.notifyPerms
       }
     );
-    this.props.loadOff();
 
-    if (serviceVendors.status === 0) {
-      requestPermissions();
-      return;
-    }
+    fetchRetry(serviceVendors, this.getVendors);
 
     if (serviceVendors.status === 200) {
       this.props.markVendorsSet(serviceVendors.data);
@@ -60,21 +59,21 @@ class ScreensIndexContainer extends Component {
       [
         <TouchableOpacity
           style={styles.indexListItem}
-          onPress={() => this.getVendors(1)}>
-            <Image
-              style={styles.iconIndex}
-              source={require('../assets/images/check-engine.jpg')}
-             />
-            <Text style={styles.textSizeSmall}>Auto Mech</Text>
-        </TouchableOpacity>,
-        <TouchableOpacity
-          style={styles.indexListItem}
           onPress={() => this.getVendors(2)}>
           <Image
             style={styles.iconIndex}
             source={require('../assets/images/autoscan.jpg')}
            />
-          <Text style={styles.textSizeSmall}>Auto Scan</Text>
+          <Text style={styles.textSizeSmall}>Scan Specialist</Text>
+        </TouchableOpacity>,
+        <TouchableOpacity
+          style={styles.indexListItem}
+          onPress={() => this.getVendors(1)}>
+            <Image
+              style={styles.iconIndex}
+              source={require('../assets/images/check-engine.jpg')}
+             />
+            <Text style={styles.textSizeSmall}>Mechanic</Text>
         </TouchableOpacity>,
         <TouchableOpacity
           style={styles.indexListItem}
@@ -86,6 +85,38 @@ class ScreensIndexContainer extends Component {
           <Text style={styles.textSizeSmall}>Electronics</Text>
         </TouchableOpacity>
       ],
+      [
+        <TouchableOpacity
+          style={styles.indexListItem}
+          onPress={() => this.getVendors(9)}>
+          <Image
+            style={Object.assign(
+              {transform: [{ rotate: '90deg' }]},
+              styles.iconIndex
+            )}
+            source={require('../assets/images/car-keys.jpg')}
+           />
+          <Text style={styles.textSizeSmall}>Security</Text>
+        </TouchableOpacity>,
+        <TouchableOpacity
+          style={styles.indexListItem}
+          onPress={() => this.getVendors(10)}>
+          <Image
+            style={styles.iconIndex}
+            source={require('../assets/images/wheel-alignment.jpg')}
+           />
+          <Text style={styles.textSizeSmall}>Alignment</Text>
+        </TouchableOpacity>,
+        <TouchableOpacity
+          style={styles.indexListItem}
+          onPress={() => this.getVendors(9)}>
+          <Image
+            style={styles.iconIndex}
+            source={require('../assets/images/tyres.jpg')}
+           />
+          <Text style={styles.textSizeSmall}>Tyres</Text>
+        </TouchableOpacity>
+        ],
       [
         <TouchableOpacity
           style={styles.indexListItem}
@@ -114,36 +145,36 @@ class ScreensIndexContainer extends Component {
            />
           <Text style={styles.textSizeSmall}>Spare Parts</Text>
         </TouchableOpacity>
-        ],
-        [
-          <TouchableOpacity
-            style={styles.indexListItem}
-            onPress={() => this.getVendors(9)}>
-            <Image
-              style={styles.iconIndex}
-              source={require('../assets/images/tyres.jpg')}
-             />
-            <Text style={styles.textSizeSmall}>Tyres</Text>
-          </TouchableOpacity>,
-          <TouchableOpacity
-            style={styles.indexListItem}
-            onPress={() => this.getVendors(5)}>
-            <Image
-              style={styles.iconIndex}
-              source={require('../assets/images/petrol-station.png')}
-             />
-            <Text style={styles.textSizeSmall}>Fuel Station</Text>
-          </TouchableOpacity>,
-          <TouchableOpacity
-            style={styles.indexListItem}
-            onPress={() => this.getVendors(8)}>
-            <Image
-              style={styles.iconIndex}
-              source={require('../assets/images/towing.jpg')}
-             />
-            <Text style={styles.textSizeSmall}>Towing Van</Text>
-          </TouchableOpacity>
-          ],
+      ],
+      [
+        <TouchableOpacity
+          style={styles.indexListItem}
+          onPress={() => this.getVendors(11)}>
+          <Image
+            style={styles.iconIndex}
+            source={require('../assets/images/upholstery.jpg')}
+           />
+          <Text style={styles.textSizeSmall}>Upholstery</Text>
+        </TouchableOpacity>,
+        <TouchableOpacity
+          style={styles.indexListItem}
+          onPress={() => this.getVendors(5)}>
+          <Image
+            style={styles.iconIndex}
+            source={require('../assets/images/petrol-station.png')}
+           />
+          <Text style={styles.textSizeSmall}>Fuel Station</Text>
+        </TouchableOpacity>,
+        <TouchableOpacity
+          style={styles.indexListItem}
+          onPress={() => this.getVendors(8)}>
+          <Image
+            style={styles.iconIndex}
+            source={require('../assets/images/towing.jpg')}
+           />
+          <Text style={styles.textSizeSmall}>Towing Van</Text>
+        </TouchableOpacity>
+      ],
     ];
 
     return (

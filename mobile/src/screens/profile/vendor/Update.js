@@ -13,7 +13,8 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
-import requestPermissions from '../../../functions/PermissionsRequest';
+import fetchRetry from '../../../functions/FetchRetry';
+import uiData from '../../../assets/data/UiData';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 import Loading from '../../../components/Loading';
@@ -25,14 +26,15 @@ class UpdateVendorProfileContainer extends Component {
     const view = this.props.state.auth.profile.vendor;
     this.state = {
       description: view.description,
+      cars: view.cars,
       serviceId: view.service.id
     }
+    //console.log(this.props.state.page.models);
   }
 
   sendUpdate = async() => {
     const profileData = this.props.state.auth.profile;
 
-    this.props.loadOn();
     let updateRequest = await fetchApi.fetchNow(
 			'put',
 			{
@@ -41,21 +43,21 @@ class UpdateVendorProfileContainer extends Component {
 				'body': {
 					description: this.state.description,
           service_id: this.state.serviceId,
+          cars: this.state.cars,
           api_token: profileData.api_token
-				}
+				},
+        'props': this.props,
+        'info': uiData.notifyPerms
 			}
 		);
-    this.props.loadOff();
 
-    if (updateRequest.status === 0) {
-      requestPermissions();
-      return;
-    }
+    fetchRetry(updateRequest, this.sendUpdate);
 
 		if (updateRequest.status === 200) {
       const updatedData = updateRequest.data;
       let newAuthData = profileData;
       newAuthData.vendor.description = updatedData.description;
+      newAuthData.vendor.model.car_model = updatedData.model.car_model;
       newAuthData.vendor.service.service_type =
         updatedData.service.service_type;
       this.props.saveProfile(newAuthData);
@@ -68,13 +70,21 @@ class UpdateVendorProfileContainer extends Component {
 
   render() {
     const serviceList = this.props.state.page.list.map(list => {
-      return list.id === this.state.service ?
-        null
-        :
+      return (
         <Picker.Item
-          key={list.id}
-          label={list.service_type}
-          value={list.id} />
+            key={list.id}
+            label={list.service_type}
+            value={list.id} />
+      )
+    });
+
+    const modelList = this.props.state.page.models.map(model => {
+      return (
+        <Picker.Item
+          key={model.id}
+          label={model.car_model}
+          value={model.id} />
+      )
     });
 
     return this.props.state.load.loading === true ?
@@ -95,13 +105,29 @@ class UpdateVendorProfileContainer extends Component {
               borderRadius: 7,
               margin: 2
             }}>
-            <Picker
-              selectedValue={this.state.serviceId}
-              onValueChange={(itemValue, itemIndex) =>
-                this.setState({serviceId: itemValue})
-              }>
-              {serviceList}
-            </Picker>
+              <Picker
+                selectedValue={this.state.serviceId}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({serviceId: itemValue})
+                }>
+                {serviceList}
+              </Picker>
+            </View>
+            <View style={{
+              height: 50,
+              width: '80%',
+              borderColor: 'black',
+              borderWidth: 1,
+              borderRadius: 7,
+              margin: 2
+            }}>
+              <Picker
+                selectedValue={this.state.cars}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({cars: itemValue})
+                }>
+                {modelList}
+              </Picker>
             </View>
             <TextInput
               multiline={true}

@@ -71,19 +71,38 @@ class VendorViewContainer extends Component {
             styles.backRedPale,
             styles.displayDataIndividual
             )}>
-            <View>
+              <View>
               <Text style={styles.textSizeMediumNormal}>
                   Service Rendered
               </Text>
               <Text style={styles.textSizeSmall}>
                   {
                     this.props.state.page.list.map(l => {
-                      return l.id === vendorData.service_id ?
-                        l.service_type: null
+                      return l.id === parseInt(vendorData.service_id) ?
+                        l.service_type: console.log(l.id)
                     })
                   }
               </Text>
-            </View>
+              </View>
+          </View>
+          <View style={Object.assign(
+            {},
+            styles.backRedPale,
+            styles.displayDataIndividual
+            )}>
+              <View>
+                <Text style={styles.textSizeMediumNormal}>
+                    Car Make
+                </Text>
+                <Text style={styles.textSizeSmall}>
+                    {
+                      this.props.state.page.models.map(c => {
+                        return c.id === parseInt(vendorData.cars) ?
+                          c.car_model: null
+                      })
+                    }
+                </Text>
+              </View>
           </View>
           {
             vendorData.description === null ?

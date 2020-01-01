@@ -115,6 +115,20 @@ class ViewVendorProfileContainer extends Component {
           <View style={Object.assign(
             {},
             styles.backRedPale,
+            styles.displayDataJoin
+            )}>
+            <View style={{ width: '85%' }}>
+            <Text style={styles.textSizeMediumNormal}>
+                Car Make
+            </Text>
+            <Text style={styles.textSizeSmallNormal}>
+                {vendorData.model.car_model}
+            </Text>
+            </View>
+          </View>
+          <View style={Object.assign(
+            {},
+            styles.backRedPale,
             styles.displayDataIndividual
             )}>
             <View style={{ width: '85%' }}>

@@ -17,7 +17,7 @@ const notifyReducer = (state = defaultState, action) => {
       }
     case 'HIDE_NOTIFY':
       return {
-        style: { display: 'none' },
+        style: 'notificationHide',
         info: {}
       }
     default:

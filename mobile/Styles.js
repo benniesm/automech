@@ -220,24 +220,20 @@ export default StyleSheet.create({
     paddingTop: 10
   },
   notificationHide: {
-    display: 'none'
+    display: 'none',
+      backgroundColor: 'white',
   },
   notificationShow: {
     backgroundColor: 'black',
     display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
-    bottom: 0,
-    height: '12%',
+    height: '100%',
     width: '100%',
     padding: 5
   },
   text: {
-  },
-  textPadded: {
-    padding: 10
-  },
-  textPaddedSmall: {
-    padding: 4
   },
   textCenter: {
     textAlign: 'center',
@@ -261,6 +257,12 @@ export default StyleSheet.create({
   },
   textColorWhite: {
     color: 'white',
+  },
+  textPadded: {
+    padding: 10
+  },
+  textPaddedSmall: {
+    padding: 4
   },
   textSizeMedium: {
     fontSize: 17,

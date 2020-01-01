@@ -15,7 +15,8 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
-import requestPermissions from '../../../functions/PermissionsRequest';
+import fetchRetry from '../../../functions/FetchRetry';
+import uiData from '../../../assets/data/UiData';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 import Loading from '../../../components/Loading';
@@ -26,7 +27,6 @@ class UpdateVendorLocationContainer extends Component {
     const profileData = this.props.state.auth.profile;
     const vendorCoords = this.props.state.map.markMe.latlng;
 
-    this.props.loadOn();
     let updateRequest = await fetchApi.fetchNow(
 			'put',
 			{
@@ -36,15 +36,13 @@ class UpdateVendorLocationContainer extends Component {
 					latitude : vendorCoords.latitude.toString(),
 					longitude: vendorCoords.longitude.toString(),
           api_token: profileData.api_token
-				}
+				},
+        'props': this.props,
+        'info': uiData.notifyPerms
 			}
 		);
-    this.props.loadOff();
 
-    if (updateRequest.status === 0) {
-      requestPermissions();
-      return;
-    }
+    fetchRetry(updateRequest, this.updateLocation);
 
 		if (updateRequest.status === 200) {
       const updatedData = updateRequest.data;

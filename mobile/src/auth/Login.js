@@ -13,7 +13,8 @@ import {
   mapDispatchToProps
 } from '../store/StateDispatch';
 import fetchApi from '../api/Fetch';
-import requestPermissions from '../functions/PermissionsRequest';
+import fetchRetry from '../functions/FetchRetry';
+import uiData from '../assets/data/UiData';
 import styles from '../../Styles.js';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
@@ -51,17 +52,17 @@ class LoginContainer extends Component {
 
 		let mobile_number = '234' + parseInt(this.state.mobilePhone);
 
-		this.props.loadOn();
 		let confirmRequest = await fetchApi.fetchNow(
 			'get',
-			{'url': 'confirm-code', 'data': 'mobile=' + mobile_number}
+			{
+				'url': 'confirm-code',
+				'data': 'mobile=' + mobile_number,
+        'props': this.props,
+        'info': uiData.notifyPerms
+			}
 		);
-		this.props.loadOff();
 
-    if (confirmRequest.status === 0) {
-      requestPermissions();
-      return;
-    }
+    fetchRetry(confirmRequest, this.sendConfirmation);
 
 		if (confirmRequest.status === 200) {
 			this.setState({
@@ -94,20 +95,17 @@ class LoginContainer extends Component {
 			this.setState({
 				errorMessage: 'Resend confirmation code to the changed the number',
 			});
-			this.props.loadOff();
 			return;
 		}
 		if (this.state.codeConfirm != this.state.code) {
 			this.setState({
 				errorMessage: 'The code you entered is incorrect',
 			});
-			this.props.loadOff();
 			return;
 		}
 
 		const url = () => this.state.registered === true ? 'login' : 'register';
 
-		this.props.loadOn();
 		let signInRequest = await fetchApi.fetchNow(
 			'post',
 			{
@@ -116,15 +114,13 @@ class LoginContainer extends Component {
 					mobile_phone: this.state.mobile,
 					password : this.state.code,
 					password_confirmation: this.state.code
-				}
+				},
+        'props': this.props,
+        'info': uiData.notifyPerms
 			}
 		);
-		this.props.loadOff();
 
-    if (signInRequest.status === 0) {
-      requestPermissions();
-      return;
-    }
+    fetchRetry(signInRequest, this.signIn);
 
 		if (signInRequest.status === 200
 			|| signInRequest.status === 201) {
@@ -141,6 +137,7 @@ class LoginContainer extends Component {
 				});
 
 				this.props.navigation.navigate('Home');
+	      console.log(data)
 		} else {
 			this.setState({
 				errorMessage: 'Invalid login or registration credentials',

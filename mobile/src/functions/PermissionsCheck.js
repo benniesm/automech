@@ -13,7 +13,6 @@ const getPermissions = async() => {
       const granted = await PermissionsAndroid.check(
         PermissionsAndroid.PERMISSIONS[listPermissions[lp]]
       );
-      //console.log(listPermissions[lp] + ': ' + granted);
 
       if (!granted) {
         permit = false;
@@ -21,17 +20,11 @@ const getPermissions = async() => {
       }
       //return request;
     } catch (err) {
-      console.log(err);
+      //console.log(err);
     }
   }
 
-  if (permit) {
-    console.log('permitted');
-    return true;
-  }
-
-  console.log('no permit')
-  return false;
+  return permit;
 }
 
 export default getPermissions;

@@ -13,7 +13,7 @@ function fetchUrl(urlName) {
   }
 }
 
-const timeout = (url, options, timeout = 10) => {
+const timeout = (url, options, timeout = 30000) => {
     return Promise.race([
         fetch(url, options),
         new Promise((_, reject) =>
@@ -54,6 +54,8 @@ const getApi = async(params) => {
   if (jsonStatus >= 500) {
     return {'status': jsonStatus, 'data': 'server Error'}
   }
+
+  return {'status': jsonStatus, 'data': jsonData};
 }
 
 const postApi = async(params) => {
@@ -77,11 +79,14 @@ const postApi = async(params) => {
     body = params.body;
   }
 
-  const response = await timeout(url + view, {
-    method: 'POST',
-    headers: headers,
-    body: body
-  }).catch(err => {
+  const response = await timeout(url + view,
+    {
+      method: 'POST',
+      headers: headers,
+      body: body
+    },
+    60000
+  ).catch(err => {
     return {'status': 1, 'data': err};
   });
 
@@ -97,6 +102,7 @@ const postApi = async(params) => {
   if (jsonStatus >= 500) {
     return {'status': jsonStatus, 'data': 'server Error'}
   }
+
   return {'status': jsonStatus, 'data': jsonData};
 }
 
@@ -127,6 +133,7 @@ const putApi = async(params) => {
   if (jsonStatus >= 500) {
     return {'status': jsonStatus, 'data': 'server Error'}
   }
+
   return {'status': jsonStatus, 'data': jsonData};
 }
 
@@ -139,21 +146,23 @@ function deleteApi(params) {
 
 const fetchApi = {
   fetchNow: async function (apiAction, params) {
+
     params.props.fetchInfoSet({
       toFetch: apiAction,
       parameters: params
     });
-    
+
     const getPerms = await getPermissions();//console.log(getPerms);
 
     if (!getPerms) {
-      console.log(params.props.state.page);
-      const requestPerms = await requestPermissions(params.props, params.info);
+      //console.log('need to');
+      const requestPerms = await requestPermissions();
       if (!requestPerms) {
-        return { 'status': 0, 'data': 'Permission not granted'}
+        return { 'status': 1, 'data': 'Permission not granted'}
       }
     }
     //console.log('yes');
+
     const executeRequest = async() => {
       switch (apiAction) {
         case 'get':
@@ -169,15 +178,13 @@ const fetchApi = {
       }
     }
 
+    params.props.loadOn();
     const doneRequest = await executeRequest();
-    //console.log(doneRequest);
-    if (doneRequest.status === 1) {
-      params.props.notifyShow(uiData.notifyInternet);
-    }
+    //console.log(params.url + ': ' + doneRequest.status);
+    params.props.loadOff();
+
     return doneRequest;
   }
 }
 
 export default fetchApi;
-
-//limit timeout connection for all requests so user can try again

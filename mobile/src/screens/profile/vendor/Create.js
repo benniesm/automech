@@ -15,7 +15,8 @@ import {
   mapDispatchToProps
 } from '../../../store/StateDispatch';
 import fetchApi from '../../../api/Fetch';
-import requestPermissions from '../../../functions/PermissionsRequest';
+import fetchRetry from '../../../functions/FetchRetry';
+import uiData from '../../../assets/data/UiData';
 import styles from '../../../../Styles';
 import Header from '../../../components/Header';
 import ShowMapView from '../../../components/MapView';
@@ -37,7 +38,6 @@ class CreateVendorProfileContainer extends Component {
       return;
     }
 
-    this.props.loadOn();
     let createRequest = await fetchApi.fetchNow(
 			'post',
 			{
@@ -49,15 +49,13 @@ class CreateVendorProfileContainer extends Component {
 					longitude: vendorCoords.longitude.toString(),
           certified: 'false',
           api_token: profileData.api_token
-				}
+				},
+        'props': this.props,
+        'info': uiData.notifyPerms
 			}
 		);
-    this.props.loadOff();
 
-    if (createRequest.status === 0) {
-      requestPermissions();
-      return;
-    }
+    fetchRetry(createRequest, this.setVendorLocation);
 
 		if (createRequest.status === 201) {
       const createdData = createRequest.data;

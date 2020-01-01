@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use GuzzleHttp\Client;
 use App\User;
+use App\CarModel;
 use App\ServiceType;
 use App\Vendor;
 
@@ -56,7 +57,9 @@ class LoginController extends Controller
             $vendor = Vendor::where('user_id', $user->id)->first();
             $user['vendor'] = $vendor;
             if ($vendor !== null) {
+              $car_model = CarModel::where('id', $vendor->cars)->first();
               $service_type = ServiceType::where('id', $vendor->service_id)->first();
+              $user->vendor['model'] = $car_model;
               $user->vendor['service'] = $service_type;
             }
 
