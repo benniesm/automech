@@ -10,7 +10,7 @@ const fetchRetry = (call, recall) => {
         :
         'Check your network and retry',
       [{
-        text: 'RETRY',
+        text: call.data === 'Permission not granted' ? 'GRANT' : 'RETRY',
         onPress: () => {recall()}
       }],
       {cancelable: false},

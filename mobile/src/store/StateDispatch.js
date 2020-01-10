@@ -10,9 +10,12 @@ import {
   logoutUser,
   profileUser
 } from './actions/AuthAction';
-import { setCoords, setMarkMe, setMarkVendors } from './actions/MapAction';
+import {
+  setCoords, setMarkMe, setMarkVendors, setMarkVendorsByCar
+} from './actions/MapAction';
 import {
   viewData,
+  getModelOne,
   getModels,
   getServices,
   setPageToMap,
@@ -59,6 +62,9 @@ const mapDispatchToProps = (dispatch) => {
     markVendorsSet: (data) => {
       dispatch(setMarkVendors(data))
     },
+    markVendorsByCarSet: (data) => {
+      dispatch(setMarkVendorsByCar(data))
+    },
     vendorSelect: (data) => {
       dispatch(selectVendor(data))
     },
@@ -88,6 +94,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     viewInfo: (data) => {
       dispatch(viewData(data))
+    },
+    modelOneGet: (data) => {
+      dispatch(getModelOne(data))
     },
     modelsGet: (data) => {
       dispatch(getModels(data))

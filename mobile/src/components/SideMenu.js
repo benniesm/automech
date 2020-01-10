@@ -41,33 +41,6 @@ class SideMenu extends Component {
   					styles.textSizeMedium,
             styles.textColorRedPale
   					)}
-            onPress={this.navigateToScreen('Scanner')}>
-              Mobile Scanner
-          </Text>
-          <Text style={Object.assign(
-  					{},
-            styles.navItem,
-  					styles.textSizeMedium,
-            styles.textColorRedPale
-  					)}
-            onPress={this.navigateToScreen('AutoLoan')}>
-              Auto Loan
-          </Text>
-          <Text style={Object.assign(
-  					{},
-            styles.navItem,
-  					styles.textSizeMedium,
-            styles.textColorRedPale
-  					)}
-            onPress={this.navigateToScreen('Insurance')}>
-              Insurance
-          </Text>
-          <Text style={Object.assign(
-  					{},
-            styles.navItem,
-  					styles.textSizeMedium,
-            styles.textColorRedPale
-  					)}
             onPress={this.navigateToScreen('Profile')}>
               Profile
           </Text>
@@ -79,6 +52,42 @@ class SideMenu extends Component {
   					)}
             onPress={this.navigateToScreen('Vendor')}>
               Vendor
+          </Text>
+          <Text style={Object.assign(
+  					{},
+            styles.navItem,
+  					styles.textSizeMedium,
+            styles.textColorBlack
+  					)}
+            onPress={this.navigateToScreen('AutoRent')}>
+              Auto Rent
+          </Text>
+          <Text style={Object.assign(
+  					{},
+            styles.navItem,
+  					styles.textSizeMedium,
+            styles.textColorBlack
+  					)}
+            onPress={this.navigateToScreen('Insurance')}>
+              Insurance
+          </Text>
+          <Text style={Object.assign(
+  					{},
+            styles.navItem,
+  					styles.textSizeMedium,
+            styles.textColorBlack
+  					)}
+            onPress={this.navigateToScreen('AutoLoan')}>
+              Auto Loan
+          </Text>
+          <Text style={Object.assign(
+  					{},
+            styles.navItem,
+  					styles.textSizeMedium,
+            styles.textColorBlack
+  					)}
+            onPress={this.navigateToScreen('MobileScanner')}>
+              Mobile Scanner
           </Text>
         </View>
         <View style={styles.menuFooter}>

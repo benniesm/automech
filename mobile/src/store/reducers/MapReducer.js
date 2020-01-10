@@ -1,4 +1,6 @@
-import { setMarkMe, setMarkVendors, setCoords } from '../actions/MapAction';
+import {
+  setMarkMe, setMarkVendors, setMarkVendorsByCar, setCoords
+} from '../actions/MapAction';
 
 const defaultState = {
   coords: {
@@ -16,7 +18,8 @@ const defaultState = {
       title: 'Pinned Location',
       description: 'Currently Selected Location'
   },
-  markVendors: []
+  markVendors: [],
+  markVendorsByCar: []
 };
 
 const mapReducer = (state = defaultState, action) => {
@@ -25,19 +28,29 @@ const mapReducer = (state = defaultState, action) => {
       return {
         coords: action.coords,
         markMe: state.markMe,
-        markVendors: state.markVendors
+        markVendors: state.markVendors,
+        markVendorsByCar: state.markVendorsByCar
       }
     case 'MARK_ME':
       return {
         markMe: action.markMe,
         coords: state.coords,
-        markVendors: state.markVendors
+        markVendors: state.markVendors,
+        markVendorsByCar: state.markVendorsByCar
       }
     case 'MARK_VENDORS':
       return {
         markVendors: action.markVendors,
         coords: state.coords,
-        markMe: state.markMe
+        markMe: state.markMe,
+        markVendorsByCar: state.markVendorsByCar
+      }
+    case 'MARK_VENDORS_BY_CAR':
+      return {
+        markVendorsByCar: action.markVendorsByCar,
+        coords: state.coords,
+        markMe: state.markMe,
+        markVendors: state.markVendors
       }
     default:
       return state;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Picker, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { connect } from 'react-redux';
 import {
@@ -12,6 +12,10 @@ import styles from '../../Styles';
 class MapViewContainer extends Component {
   constructor(props) {
     super(props);
+    //console.log(this.props.state.map.markVendors);
+    this.state = {
+      carMakeId: this.props.state.page.modelOne
+    }
   }
 
   changeCoordinates = (coordinates) => {
@@ -35,6 +39,21 @@ class MapViewContainer extends Component {
 
     this.props.coordsSet(newCoordinates);
     this.props.markMeSet(newMark);
+  }
+
+  changeCarMake = (itemValue) => {
+    if (itemValue === '0') {
+      this.props.markVendorsByCarSet(this.props.state.map.markVendors);
+      return;
+    }
+    //console.log(itemValue);
+    const filteredMakes = this.props.state.map.markVendors.filter(fMake => {
+      //console.log(fMake.cars + ' =? ' + itemValue);
+      return parseInt(fMake.cars) === itemValue
+    });
+    //console.log(filteredMakes);
+    this.props.markVendorsByCarSet(filteredMakes);
+    this.props.modelOneGet(itemValue);
   }
 
   viewVendor = (ven) => {
@@ -74,39 +93,67 @@ class MapViewContainer extends Component {
     const markMe = coordsNow.markMe;
     const markVendors = coordsNow.markVendors;
 
+    const makes =this.props.state.page.models.map(make => {
+      return <Picker.Item key={make.id} label={make.car_model} value={make.id} />
+    });
+
     return(
-      <MapView
-        style={styles.map}
-        region={ coordsNow.coords }
-      >
-        {
-          this.props.parent === 'me' ?
-            <Marker
-              draggable
-              onDragEnd={
-                (e) => this.changeCoordinates(e.nativeEvent.coordinate)
+      <>
+        <View style={{
+          height: 50,
+          width: '99%',
+          borderColor: 'orange',
+          borderWidth: 1,
+          borderRadius: 7,
+          margin: 2
+        }}>
+          <Picker
+            selectedValue={this.state.carMakeId}
+            onValueChange={(itemValue, itemIndex) =>
+              {
+                this.setState({carMakeId: itemValue});
+                this.changeCarMake(itemValue);
               }
-              coordinate={markMe.latlng}
-              title={markMe.title}
-              description={markMe.description}
-            />
-            :
-            this.props.state.map.markVendors.map(marker => {
-              return (
+            }>
+            <Picker.Item label="ALL CAR MAKES" value="0" />
+            {makes}
+          </Picker>
+        </View>
+        <View style={{ height: '91%', width: '100%' }}>
+          <MapView
+            style={styles.map}
+            region={ coordsNow.coords }
+          >
+            {
+              this.props.parent === 'me' ?
                 <Marker
-                  key={marker.id}
-                  coordinate={{
-                    latitude: Number(marker.latitude),
-                    longitude: Number(marker.longitude)
-                  }}
-                  title={marker.user.name.toString()}
-                  description={marker.description}
-                  onPress={() => this.viewVendor(marker)}
+                  draggable
+                  onDragEnd={
+                    (e) => this.changeCoordinates(e.nativeEvent.coordinate)
+                  }
+                  coordinate={markMe.latlng}
+                  title={markMe.title}
+                  description={markMe.description}
                 />
-              )
-            })
-        }
-      </MapView>
+                :
+                this.props.state.map.markVendorsByCar.map(marker => {
+                  return (
+                    <Marker
+                      key={marker.id}
+                      coordinate={{
+                        latitude: Number(marker.latitude),
+                        longitude: Number(marker.longitude)
+                      }}
+                      title={marker.user.name.toString()}
+                      description={marker.description}
+                      onPress={() => this.viewVendor(marker)}
+                    />
+                  )
+                })
+            }
+          </MapView>
+        </View>
+      </>
     )
   }
 }

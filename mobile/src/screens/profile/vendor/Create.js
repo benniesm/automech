@@ -48,6 +48,7 @@ class CreateVendorProfileContainer extends Component {
 					latitude : vendorCoords.latitude.toString(),
 					longitude: vendorCoords.longitude.toString(),
           certified: 'false',
+          cars: this.props.state.page.modelOne,
           api_token: profileData.api_token
 				},
         'props': this.props,
@@ -66,6 +67,7 @@ class CreateVendorProfileContainer extends Component {
 			this.props.navigation.navigate('Vendor');
 		} else {
       Alert.alert('Request Error, Please try again');
+      console.log(createRequest);
     }
   }
 

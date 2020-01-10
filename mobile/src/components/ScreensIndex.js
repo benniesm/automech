@@ -64,11 +64,11 @@ class ScreensIndexContainer extends Component {
             style={styles.iconIndex}
             source={require('../assets/images/autoscan.jpg')}
            />
-          <Text style={styles.textSizeSmall}>Scan Specialist</Text>
+          <Text style={styles.textSizeSmall}>Auto Scan</Text>
         </TouchableOpacity>,
         <TouchableOpacity
           style={styles.indexListItem}
-          onPress={() => this.getVendors(1)}>
+          onPress={() => this.getVendors(6)}>
             <Image
               style={styles.iconIndex}
               source={require('../assets/images/check-engine.jpg')}
@@ -100,7 +100,7 @@ class ScreensIndexContainer extends Component {
         </TouchableOpacity>,
         <TouchableOpacity
           style={styles.indexListItem}
-          onPress={() => this.getVendors(10)}>
+          onPress={() => this.getVendors(1)}>
           <Image
             style={styles.iconIndex}
             source={require('../assets/images/wheel-alignment.jpg')}
@@ -109,7 +109,7 @@ class ScreensIndexContainer extends Component {
         </TouchableOpacity>,
         <TouchableOpacity
           style={styles.indexListItem}
-          onPress={() => this.getVendors(9)}>
+          onPress={() => this.getVendors(11)}>
           <Image
             style={styles.iconIndex}
             source={require('../assets/images/tyres.jpg')}
@@ -129,7 +129,7 @@ class ScreensIndexContainer extends Component {
         </TouchableOpacity>,
         <TouchableOpacity
           style={styles.indexListItem}
-          onPress={() => this.getVendors(6)}>
+          onPress={() => this.getVendors(7)}>
           <Image
             style={styles.iconIndex}
             source={require('../assets/images/paint.jpg')}
@@ -138,7 +138,7 @@ class ScreensIndexContainer extends Component {
         </TouchableOpacity>,
         <TouchableOpacity
           style={styles.indexListItem}
-          onPress={() => this.getVendors(7)}>
+          onPress={() => this.getVendors(8)}>
           <Image
             style={styles.iconIndex}
             source={require('../assets/images/spare-parts.jpg')}
@@ -149,7 +149,7 @@ class ScreensIndexContainer extends Component {
       [
         <TouchableOpacity
           style={styles.indexListItem}
-          onPress={() => this.getVendors(11)}>
+          onPress={() => this.getVendors(12)}>
           <Image
             style={styles.iconIndex}
             source={require('../assets/images/upholstery.jpg')}
@@ -167,7 +167,7 @@ class ScreensIndexContainer extends Component {
         </TouchableOpacity>,
         <TouchableOpacity
           style={styles.indexListItem}
-          onPress={() => this.getVendors(8)}>
+          onPress={() => this.getVendors(10)}>
           <Image
             style={styles.iconIndex}
             source={require('../assets/images/towing.jpg')}

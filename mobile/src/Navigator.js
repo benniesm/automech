@@ -13,6 +13,10 @@ import UpdateVendorProfile from './screens/profile/vendor/Update';
 import UploadVendorImage from './screens/profile/vendor/UploadImage';
 import ViewBasicProfile from './screens/profile/basic/View';
 import ViewVendorProfile from './screens/profile/vendor/View';
+import AutoLoan from './screens/services/AutoLoan';
+import AutoRent from './screens/services/AutoRent';
+import Insurance from './screens/services/Insurance';
+import MobileScanner from './screens/services/MobileScanner';
 import Services from './screens/services/Services';
 
 const MyDrawerNavigator = createDrawerNavigator({
@@ -44,13 +48,16 @@ const MyDrawerNavigator = createDrawerNavigator({
     screen: ViewVendorProfile,
   },
   AutoLoan: {
-    screen: 'autoloan',
+    screen: AutoLoan,
   },
   Insurance: {
-    screen: 'insurance',
+    screen: Insurance,
   },
-  Scanner: {
-    screen: 'scanner',
+  MobileScanner: {
+    screen: MobileScanner,
+  },
+  AutoRent: {
+    screen: AutoRent,
   },
   Services: {
     screen: Services,

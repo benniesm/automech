@@ -5,6 +5,13 @@ const viewData = (data) => {
   }
 }
 
+const getModelOne = (data) => {
+  return {
+    type: 'CAR_MODEL_ONE',
+    modelOne: data
+  }
+}
+
 const getModels = (data) => {
   return {
     type: 'CAR_MODELS',
@@ -31,4 +38,6 @@ const setPageToView = () => {
   }
 }
 
-export { viewData, getModels, getServices, setPageToMap, setPageToView };
+export {
+  viewData, getModelOne, getModels, getServices, setPageToMap, setPageToView
+};

@@ -19,4 +19,11 @@ const setMarkVendors = (data) => {
   }
 }
 
-export { setCoords, setMarkMe, setMarkVendors };
+const setMarkVendorsByCar = (data) => {
+  return {
+    type: 'MARK_VENDORS_BY_CAR',
+    markVendorsByCar: data
+  }
+}
+
+export { setCoords, setMarkMe, setMarkVendors, setMarkVendorsByCar };
