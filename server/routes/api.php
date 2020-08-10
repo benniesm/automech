@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::group(['middleware' => ['auth:api', 'cors']], function() {
     Route::get('profile/{user}', 'ProfileController@show');
-	  Route::put('profile/{user}', 'ProfileController@update');
+	Route::put('profile/{user}', 'ProfileController@update');
 
     Route::get('vendors', 'VendorController@index');
   	Route::get('vendors/{vendor}', 'VendorController@show');
